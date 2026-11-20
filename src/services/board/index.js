@@ -1,29 +1,30 @@
 const { DEV, VITE_LOCAL } = import.meta.env
 
-import { getRandomIntInclusive, makeId } from '../util.service'
-
 import { boardService as local } from './board.service.local'
 import { boardService as remote } from './board.service.remote'
 
 function getEmptyBoard() {
-	return {
-        _id: '',
-		vendor: makeId(),
-		speed: getRandomIntInclusive(80, 240),
-		msgs: [],
-	}
+  return {
+    _id: '',
+    title: '',
+    isStarred: false,
+    style: { backgroundImage: '' },
+    labels: [],
+    members: [],
+    groups: [],
+    activities: [],
+  }
 }
 
 function getDefaultFilter() {
-    return {
-        txt: '',
-        minSpeed: '',
-        sortField: '',
-        sortDir: '',
-    }
+  return {
+    txt: '',
+    sortField: '',
+    sortDir: '',
+  }
 }
 
-const service = (VITE_LOCAL === 'true') ? local : remote
+const service = VITE_LOCAL === 'true' ? local : remote
 export const boardService = { getEmptyBoard, getDefaultFilter, ...service }
 
 // Easy access to this service from the dev tools console

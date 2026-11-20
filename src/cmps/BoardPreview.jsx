@@ -1,13 +1,17 @@
 import { Link } from 'react-router-dom'
 
 export function BoardPreview({ board }) {
-    return <article className="board-preview">
-        <header>
-            <Link to={`/board/${board._id}`}>{board.vendor}</Link>
-        </header>
+  return (
+    <article className="board-preview">
+      <header>
+        <Link to={`/board/${board._id}`}>{board.title}</Link>
+      </header>
 
-        <p>Speed: <span>{board.speed.toLocaleString()} Km/h</span></p>
-        {board.owner && <p>Owner: <span>{board.owner.fullname}</span></p>}
-        
+      {board.createdBy && (
+        <p>
+          Created by: <span>{board.createdBy.fullname}</span>
+        </p>
+      )}
     </article>
+  )
 }

@@ -1,23 +1,23 @@
+@import 'setup/var';
+@import 'setup/typography';
 
-@import "setup/var";
-@import "setup/typography";
+@import 'basics/helpers';
+@import 'basics/layout';
+@import 'basics/base';
+@import 'basics/forms';
 
-@import "basics/helpers";
-@import "basics/layout";
-@import "basics/base";
-@import "basics/forms";
+@import 'RootCmp';
 
-@import "RootCmp";
+@import 'cmps/HomePage';
+@import 'cmps/UserDetails';
+@import 'cmps/LoginSignup';
 
-@import "cmps/HomePage";
-@import "cmps/UserDetails";
-@import "cmps/LoginSignup";
+@import 'cmps/AppHeader';
+@import 'cmps/AppFooter';
+@import 'cmps/UserMsg';
 
-@import "cmps/AppHeader";
-@import "cmps/AppFooter";
-@import "cmps/UserMsg";
-
-@import "cmps/board/BoardIndex";
-@import "cmps/board/BoardList";
-@import "cmps/board/BoardPreview";
-@import "cmps/board/BoardFilter";
+@import 'cmps/board/BoardIndex';
+@import 'cmps/board/BoardList';
+@import 'cmps/board/BoardPreview';
+@import 'cmps/board/BoardFilter';
+@import 'cmps/board/BoardDetails';

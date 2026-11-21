@@ -1,0 +1,30 @@
+.board-details {
+  & .group-container {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: var(--list-width);
+    gap: 12px;
+    align-items: start;
+    overflow-x: auto;
+  }
+
+  & .group {
+    display: grid;
+    gap: 8px;
+    padding: 8px;
+    background-color: var(--list-bg);
+    border-radius: var(--radius-list);
+  }
+
+  & .task {
+    padding: 8px 12px;
+    background-color: var(--card-bg);
+    border-radius: var(--radius-card);
+    box-shadow: var(--card-shadow);
+  }
+
+  & h4,
+  & p {
+    margin: 0;
+  }
+}

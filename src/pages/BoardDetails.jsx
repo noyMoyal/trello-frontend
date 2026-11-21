@@ -21,7 +21,18 @@ export function BoardDetails() {
       {board && (
         <div>
           <h3>{board.title}</h3>
-          <pre> {JSON.stringify(board, null, 2)} </pre>
+          <section className="group-container">
+            {board.groups.map((group) => (
+              <section key={group.id} className="group">
+                <h4>{group.title}</h4>
+                {group.tasks.map((task) => (
+                  <article key={task.id} className="task">
+                    <p>{task.title}</p>
+                  </article>
+                ))}
+              </section>
+            ))}
+          </section>{' '}
         </div>
       )}
     </section>

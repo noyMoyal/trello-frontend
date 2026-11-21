@@ -51,6 +51,7 @@ async function save(board) {
   if (board._id) {
     savedBoard = await storageService.put(STORAGE_KEY, board)
   } else {
+    const loggedinUser = userService.getLoggedinUser()
     const boardToSave = {
       title: board.title,
       isStarred: board.isStarred,
@@ -60,7 +61,11 @@ async function save(board) {
       groups: board.groups,
       activities: board.activities,
       // Later, createdBy is set by the backend
-      createdBy: userService.getLoggedinUser(),
+      createdBy: {
+        _id: loggedinUser._id,
+        fullname: loggedinUser.fullname,
+        imgUrl: loggedinUser.imgUrl,
+      },
     }
     savedBoard = await storageService.post(STORAGE_KEY, boardToSave)
   }

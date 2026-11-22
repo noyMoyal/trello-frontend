@@ -1,4 +1,5 @@
-export function WorkspaceSidebar() {
+import PropTypes from 'prop-types'
+export function WorkspaceSidebar({ view, onSetView }) {
   return (
     <aside className="workspace-sidebar" aria-label="Workspace navigation">
       <div className="sidebar-workspace">
@@ -6,11 +7,19 @@ export function WorkspaceSidebar() {
         <div><strong>Workspace</strong><span>Free plan</span></div>
       </div>
       <nav className="workspace-nav" aria-label="Board views">
-        <button className="is-active" aria-pressed="true">
+        <button className={view === 'all' ? 'is-active' : ''} aria-pressed={view === 'all'} onClick={() => onSetView('all')}>
           <span aria-hidden="true">▦</span> Boards
+        </button>
+        <button className={view === 'starred' ? 'is-active' : ''} aria-pressed={view === 'starred'} onClick={() => onSetView('starred')}>
+          <span aria-hidden="true">☆</span> Starred boards
         </button>
       </nav>
       <p className="sidebar-note">Ideas, plans, and everything<br />in between. All in one place.</p>
     </aside>
   )
+}
+
+WorkspaceSidebar.propTypes = {
+  view: PropTypes.string.isRequired,
+  onSetView: PropTypes.func.isRequired,
 }

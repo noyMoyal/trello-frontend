@@ -1,12 +1,15 @@
 import { useState, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
-import { loadBoards, updateBoard } from '../store/actions/board.actions'
-import { showErrorMsg } from '../services/event-bus.service'
+import { loadBoards, addBoard, updateBoard, removeBoard } from '../store/actions/board.actions'
+import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service'
 import { boardService } from '../services/board/'
 
 import { BoardList } from '../cmps/BoardList'
 import { BoardFilter } from '../cmps/BoardFilter'
+import { BoardEdit } from '../cmps/workspace/BoardEdit'
+import { BoardRemove } from '../cmps/workspace/BoardRemove'
 import { WorkspaceSidebar } from '../cmps/workspace/WorkspaceSidebar'
 
 export function BoardIndex() {
@@ -16,8 +19,13 @@ export function BoardIndex() {
   const [isLoading, setIsLoading] = useState(true)
   const [loadError, setLoadError] = useState('')
   const [retryCount, setRetryCount] = useState(0)
+  const [boardToEdit, setBoardToEdit] = useState(null)
+  const [boardToRemove, setBoardToRemove] = useState(null)
   const [pendingIds, setPendingIds] = useState([])
   const pendingBoards = useRef(new Set())
+  const dialogTrigger = useRef(null)
+  const workspaceRef = useRef(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     let isActive = true
@@ -41,6 +49,20 @@ export function BoardIndex() {
   }
   const starredBoards = filteredBoards.filter(board => board.isStarred)
 
+  async function onSaveBoard(changes) {
+    if (boardToEdit._id) {
+      const board = await boardService.getById(boardToEdit._id)
+      await updateBoard({ ...board, title: changes.title, style: changes.style })
+      onCloseDialog()
+      showSuccessMsg('Board updated')
+    } else {
+      const board = await addBoard({ ...boardService.getEmptyBoard(), ...changes })
+      onCloseDialog()
+      showSuccessMsg('Board created')
+      navigate(`/board/${board._id}`)
+    }
+  }
+
   async function onToggleStar(boardPreview) {
     if (pendingBoards.current.has(boardPreview._id)) return
     pendingBoards.current.add(boardPreview._id)
@@ -56,14 +78,47 @@ export function BoardIndex() {
     }
   }
 
+  async function onRemoveBoard() {
+    await removeBoard(boardToRemove._id)
+    onCloseDialog()
+    showSuccessMsg('Board deleted')
+  }
+
+  function onCreateBoard() {
+    dialogTrigger.current = document.activeElement
+    setBoardToEdit(boardService.getEmptyBoard())
+  }
+
+  function onEditBoard(board) {
+    dialogTrigger.current = document.activeElement
+    setBoardToEdit(board)
+  }
+
+  function onRequestRemove(board) {
+    dialogTrigger.current = document.activeElement
+    setBoardToRemove(board)
+  }
+
+  function onCloseDialog() {
+    setBoardToEdit(null)
+    setBoardToRemove(null)
+    requestAnimationFrame(() => {
+      const trigger = dialogTrigger.current
+      if (trigger?.isConnected) trigger.focus()
+      else workspaceRef.current?.querySelector('.workspace-heading button')?.focus()
+    })
+  }
+
   const listProps = {
     onToggleStar,
+    onUpdateBoard: onEditBoard,
+    onRemoveBoard: onRequestRemove,
     pendingIds,
   }
 
   return (
-    <section className="board-index">
-      <WorkspaceSidebar view={view} onSetView={setView} />
+    <section className="board-index" ref={workspaceRef}>
+      <WorkspaceSidebar view={view} onSetView={setView} onCreateBoard={onCreateBoard} />
       <div className="workspace-content">
         <header className="workspace-heading">
           <div className="workspace-avatar" aria-hidden="true">W</div>
@@ -72,6 +127,9 @@ export function BoardIndex() {
             <h1>Workspace</h1>
             <p>A little space for your next big idea.</p>
           </div>
+          <button className="workspace-primary" onClick={onCreateBoard}>
+            <span aria-hidden="true">＋</span> Create board
+          </button>
         </header>
         <BoardFilter filterBy={filterBy} setFilterBy={setFilterBy} />
         {isLoading ? (
@@ -107,7 +165,8 @@ export function BoardIndex() {
                 {!boards.length ? (
                   <div className="workspace-empty">
                     <h3>Good things start with a board</h3>
-                    <p>Your workspace boards will appear here.</p>
+                    <p>Create your first board to start organizing your ideas.</p>
+                    <button className="workspace-primary" onClick={onCreateBoard}>Create board</button>
                   </div>
                 ) : !filteredBoards.length ? (
                   <div className="workspace-empty">
@@ -115,12 +174,14 @@ export function BoardIndex() {
                     <p>Try a different name or clear your search.</p>
                     <button className="workspace-secondary" onClick={() => setFilterBy({ ...filterBy, txt: '' })}>Clear search</button>
                   </div>
-                ) : <BoardList boards={filteredBoards} {...listProps} />}
+                ) : <BoardList boards={filteredBoards} onCreateBoard={onCreateBoard} {...listProps} />}
               </section>
             )}
           </>
         )}
       </div>
+      {boardToEdit && <BoardEdit board={boardToEdit} onSaveBoard={onSaveBoard} onClose={onCloseDialog} />}
+      {boardToRemove && <BoardRemove board={boardToRemove} onRemoveBoard={onRemoveBoard} onClose={onCloseDialog} />}
     </section>
   )
 }

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-export function WorkspaceSidebar({ view, onSetView }) {
+export function WorkspaceSidebar({ view, onSetView, onCreateBoard }) {
   return (
     <aside className="workspace-sidebar" aria-label="Workspace navigation">
       <div className="sidebar-workspace">
@@ -14,6 +14,10 @@ export function WorkspaceSidebar({ view, onSetView }) {
           <span aria-hidden="true">☆</span> Starred boards
         </button>
       </nav>
+      <div className="sidebar-boards">
+        <span>YOUR WORKSPACE</span>
+        <button onClick={onCreateBoard}><span aria-hidden="true">＋</span> Create a board</button>
+      </div>
       <p className="sidebar-note">Ideas, plans, and everything<br />in between. All in one place.</p>
     </aside>
   )
@@ -22,4 +26,5 @@ export function WorkspaceSidebar({ view, onSetView }) {
 WorkspaceSidebar.propTypes = {
   view: PropTypes.string.isRequired,
   onSetView: PropTypes.func.isRequired,
+  onCreateBoard: PropTypes.func.isRequired,
 }

@@ -1,5 +1,5 @@
 import { storageService } from '../async-storage.service'
-import { makeId, loadFromStorage, saveToStorage } from '../util.service'
+import { loadFromStorage, saveToStorage } from '../util.service'
 import { userService } from '../user'
 
 const STORAGE_KEY = 'board'
@@ -53,7 +53,9 @@ async function save(board) {
   if (board._id) {
     savedBoard = await storageService.put(STORAGE_KEY, board)
   } else {
-    const loggedinUser = userService.getLoggedinUser()
+    const loggedinUser = userService.getLoggedinUser() || {
+      _id: 'guest', fullname: 'Guest', imgUrl: '',
+    }
     const boardToSave = {
       title: board.title,
       isStarred: board.isStarred,
@@ -75,7 +77,7 @@ async function save(board) {
 }
 function _createBoards() {
   var boards = loadFromStorage(STORAGE_KEY)
-  if (boards && boards.length > 0) return
+  if (boards) return
 
   const noy = { _id: 'u101', fullname: 'Noy', imgUrl: '' }
 

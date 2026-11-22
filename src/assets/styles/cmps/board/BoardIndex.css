@@ -1,4 +1,5 @@
 @import "./WorkspaceSidebar.css";
+@import "./BoardEdit.css";
 
 .workspace-layout {
     --workspace-text: #172b4d;

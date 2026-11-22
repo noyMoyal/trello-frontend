@@ -24,11 +24,21 @@
         & button:hover { background: #edf0f4; }
         & button.is-active { background: #e9f2ff; color: #0c66e4; font-weight: 600; }
     }
+    .sidebar-boards {
+        margin-top: 32px;
+        border-top: 1px solid var(--workspace-border);
+        padding-top: 24px;
+
+        > span { display: block; padding-inline: 14px; font-size: 10px; font-weight: 700; letter-spacing: 1.3px; color: #626f86; }
+        & button { display: flex; align-items: center; gap: 12px; padding: 14px; background: transparent; color: #44546f; width: 100%; text-align: left; font-size: 13px; border-radius: 6px; }
+        & button:hover { background: #edf0f4; }
+        & button > span { font-size: 19px; }
+    }
     .sidebar-note { color: #626f86; font-size: 12px; line-height: 1.8; margin: auto 14px 0; padding-top: 64px; }
 
     @media (max-width: 760px) {
         .workspace-sidebar { padding: 12px 20px; border-right: 0; border-bottom: 1px solid var(--workspace-border); }
-        .sidebar-workspace, .sidebar-note { display: none; }
+        .sidebar-workspace, .sidebar-boards, .sidebar-note { display: none; }
         .workspace-nav { display: flex; gap: 8px; }
         .workspace-nav button { width: auto; padding: 9px 14px; font-size: 13px; }
     }

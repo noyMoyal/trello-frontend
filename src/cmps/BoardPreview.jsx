@@ -1,13 +1,29 @@
 import PropTypes from 'prop-types'
+import { useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
-export function BoardPreview({ board, onToggleStar, isPending }) {
+export function BoardPreview({ board, onToggleStar, onUpdateBoard, onRemoveBoard, isPending }) {
+  const menuRef = useRef(null)
   const { backgroundColor, backgroundImage } = board.style || {}
   const coverStyle = {
     backgroundColor: backgroundColor || '#0c66e4',
     backgroundImage: backgroundImage
       ? (backgroundImage.startsWith('url(') ? backgroundImage : `url("${backgroundImage}")`)
       : undefined,
+  }
+
+  useEffect(() => {
+    function onPointerDown(ev) {
+      if (!menuRef.current?.contains(ev.target)) menuRef.current?.removeAttribute('open')
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    return () => document.removeEventListener('pointerdown', onPointerDown)
+  }, [])
+
+  function onAction(action) {
+    menuRef.current.removeAttribute('open')
+    menuRef.current.querySelector('summary').focus()
+    action(board)
   }
 
   return (
@@ -28,6 +44,19 @@ export function BoardPreview({ board, onToggleStar, isPending }) {
           <Link to={`/board/${board._id}`}>{board.title}</Link>
           <span>Workspace board</span>
         </div>
+        <details className="board-menu" ref={menuRef} onKeyDown={ev => {
+          if (ev.key === 'Escape') {
+            ev.preventDefault()
+            menuRef.current.removeAttribute('open')
+            menuRef.current.querySelector('summary').focus()
+          }
+        }}>
+          <summary aria-label={`Actions for ${board.title}`}>···</summary>
+          <div className="board-menu-content">
+            <button disabled={isPending} onClick={() => onAction(onUpdateBoard)}>Edit board</button>
+            <button className="board-delete-action" disabled={isPending} onClick={() => onAction(onRemoveBoard)}>Delete board</button>
+          </div>
+        </details>
       </div>
     </article>
   )
@@ -36,5 +65,7 @@ export function BoardPreview({ board, onToggleStar, isPending }) {
 BoardPreview.propTypes = {
   board: PropTypes.shape({ _id: PropTypes.string.isRequired, title: PropTypes.string.isRequired, isStarred: PropTypes.bool, style: PropTypes.object }).isRequired,
   onToggleStar: PropTypes.func.isRequired,
+  onUpdateBoard: PropTypes.func.isRequired,
+  onRemoveBoard: PropTypes.func.isRequired,
   isPending: PropTypes.bool,
 }

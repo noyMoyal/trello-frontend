@@ -63,5 +63,27 @@
         & a { color: #172b4d; font-size: 13px; font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         > span { color: #626f86; font-size: 11px; }
     }
+    .board-menu {
+        position: relative;
+        flex-shrink: 0;
 
+        & summary { display: grid; place-items: center; list-style: none; cursor: pointer; width: 30px; height: 30px; border-radius: 5px; color: #626f86; font-size: 22px; font-weight: 700; line-height: 1; }
+        & summary::-webkit-details-marker { display: none; }
+        & summary:hover, &[open] summary { background: #f1f2f4; }
+    }
+    .board-menu-content {
+        position: absolute;
+        top: 35px;
+        right: 0;
+        width: 166px;
+        padding: 5px;
+        border: 1px solid #dfe3e9;
+        border-radius: 7px;
+        box-shadow: 0 6px 18px #091e4226;
+        background: #fff;
+
+        & button { display: block; width: 100%; text-align: left; background: transparent; color: #172b4d; padding: 10px; border-radius: 4px; font-size: 13px; }
+        & button:hover { background: #f1f2f4; }
+        .board-delete-action { color: #ae2e24; }
+    }
 }

@@ -1,74 +1,68 @@
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
-import {
-  loadBoards,
-  addBoard,
-  updateBoard,
-  removeBoard,
-} from '../store/actions/board.actions'
-
-import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service'
-import { boardService } from '../services/board/'
-import { userService } from '../services/user'
+import { loadBoards } from '../store/actions/board.actions'
 
 import { BoardList } from '../cmps/BoardList'
-import { BoardFilter } from '../cmps/BoardFilter'
+import { WorkspaceSidebar } from '../cmps/workspace/WorkspaceSidebar'
 
 export function BoardIndex() {
-  const [filterBy, setFilterBy] = useState(boardService.getDefaultFilter())
-  const boards = useSelector((storeState) => storeState.boardModule.boards)
+  const boards = useSelector(storeState => storeState.boardModule.boards)
+  const [isLoading, setIsLoading] = useState(true)
+  const [loadError, setLoadError] = useState('')
+  const [retryCount, setRetryCount] = useState(0)
 
   useEffect(() => {
-    loadBoards(filterBy)
-  }, [filterBy])
+    let isActive = true
+    setIsLoading(true)
+    setLoadError('')
+    loadBoards()
+      .catch(() => {
+        if (isActive) setLoadError('We couldn’t load your boards. Please try again.')
+      })
+      .finally(() => {
+        if (isActive) setIsLoading(false)
+      })
+    return () => { isActive = false }
+  }, [retryCount])
 
-  async function onRemoveBoard(boardId) {
-    try {
-      await removeBoard(boardId)
-      showSuccessMsg('Board removed')
-    } catch (err) {
-      showErrorMsg('Cannot remove board')
-    }
-  }
-
-  async function onAddBoard() {
-    const board = boardService.getEmptyBoard()
-    board.title = prompt('Board title?', 'My board')
-    try {
-      const savedBoard = await addBoard(board)
-      showSuccessMsg(`Board added (id: ${savedBoard._id})`)
-    } catch (err) {
-      showErrorMsg('Cannot add board')
-    }
-  }
-
-  async function onUpdateBoard(board) {
-    const title = prompt('New title?', board.title)
-    if (!title || title === board.title) return
-
-    const boardToSave = { ...board, title }
-    try {
-      const savedBoard = await updateBoard(boardToSave)
-      showSuccessMsg(`Board updated, new title: ${savedBoard.title}`)
-    } catch (err) {
-      showErrorMsg('Cannot update board')
-    }
-  }
   return (
     <section className="board-index">
-      <header>
-        <h2>Boards</h2>
-        {userService.getLoggedinUser() && (
-          <button onClick={onAddBoard}>Add a Board</button>
+      <WorkspaceSidebar />
+      <div className="workspace-content">
+        <header className="workspace-heading">
+          <div className="workspace-avatar" aria-hidden="true">W</div>
+          <div>
+            <p className="workspace-eyebrow">YOUR WORKSPACE</p>
+            <h1>Workspace</h1>
+            <p>A little space for your next big idea.</p>
+          </div>
+        </header>
+        {isLoading ? (
+          <div className="workspace-state" role="status">Loading your boards…</div>
+        ) : loadError ? (
+          <div className="workspace-state" role="alert">
+            <h2>Something went wrong</h2>
+            <p>{loadError}</p>
+            <button className="workspace-primary" onClick={() => setRetryCount(count => count + 1)}>Try again</button>
+          </div>
+        ) : (
+          <>
+              <section className="workspace-section" aria-labelledby="boards-heading">
+                <div className="workspace-section-heading">
+                  <h2 id="boards-heading"><span aria-hidden="true">▦</span> Your boards</h2>
+                  <span className="board-count">{boards.length}</span>
+                </div>
+                {!boards.length ? (
+                  <div className="workspace-empty">
+                    <h3>Good things start with a board</h3>
+                    <p>Your workspace boards will appear here.</p>
+                  </div>
+                ) : <BoardList boards={boards} />}
+              </section>
+          </>
         )}
-      </header>
-      <BoardFilter filterBy={filterBy} setFilterBy={setFilterBy} />
-      <BoardList
-        boards={boards}
-        onRemoveBoard={onRemoveBoard}
-        onUpdateBoard={onUpdateBoard}
-      />
+      </div>
     </section>
   )
 }

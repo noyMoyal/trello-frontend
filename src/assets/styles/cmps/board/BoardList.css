@@ -1,22 +1,15 @@
-.board-list {
-    --min-column-size: 220px;
-
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(var(--min-column-size), 1fr));
-    gap: .5em;
-
-    & li {
+.workspace-layout {
+    .board-list {
         display: grid;
-        grid-template-columns: max-content auto;
-        padding: .5em;
-        background-color: var(--clr2);
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 22px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
 
-        .actions {
-            justify-self: end;
-
-            & button {
-                padding: .3em .5em;
-            }
-        }
+        > li { min-width: 0; }
+    }
+    @media (max-width: 480px) {
+        .board-list { grid-template-columns: 1fr; gap: 16px; }
     }
 }

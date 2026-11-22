@@ -1,0 +1,35 @@
+.workspace-layout {
+    .workspace-sidebar {
+        display: flex;
+        flex-direction: column;
+        padding: 32px 16px 24px;
+        background: #fbfcfd;
+        border-right: 1px solid var(--workspace-border);
+    }
+    .sidebar-workspace {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0 10px 26px;
+
+        & strong { display: block; font-size: 14px; font-weight: 650; }
+        & div > span { display: block; margin-top: 3px; color: var(--workspace-muted); font-size: 12px; }
+    }
+    .workspace-nav {
+        display: grid;
+        gap: 6px;
+
+        & button { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 14px; border-radius: 6px; text-align: left; background: transparent; color: #44546f; font-size: 14px; font-weight: 500; }
+        & button > span { font-size: 21px; line-height: 1; }
+        & button:hover { background: #edf0f4; }
+        & button.is-active { background: #e9f2ff; color: #0c66e4; font-weight: 600; }
+    }
+    .sidebar-note { color: #626f86; font-size: 12px; line-height: 1.8; margin: auto 14px 0; padding-top: 64px; }
+
+    @media (max-width: 760px) {
+        .workspace-sidebar { padding: 12px 20px; border-right: 0; border-bottom: 1px solid var(--workspace-border); }
+        .sidebar-workspace, .sidebar-note { display: none; }
+        .workspace-nav { display: flex; gap: 8px; }
+        .workspace-nav button { width: auto; padding: 9px 14px; font-size: 13px; }
+    }
+}

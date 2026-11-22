@@ -1,30 +1,20 @@
-import { userService } from '../services/user'
+import PropTypes from 'prop-types'
 import { BoardPreview } from './BoardPreview'
 
-export function BoardList({ boards, onRemoveBoard, onUpdateBoard }) {
-  function shouldShowActionBtns(board) {
-    const user = userService.getLoggedinUser()
-
-    if (!user) return false
-    if (user.isAdmin) return true
-    return board.createdBy?._id === user._id
-  }
-
+export function BoardList({ boards }) {
   return (
-    <section>
-      <ul className="board-list">
-        {boards.map((board) => (
-          <li key={board._id}>
-            <BoardPreview board={board} />
-            {shouldShowActionBtns(board) && (
-              <div className="actions">
-                <button onClick={() => onUpdateBoard(board)}>Edit</button>
-                <button onClick={() => onRemoveBoard(board._id)}>x</button>
-              </div>
-            )}
-          </li>
-        ))}
-      </ul>
-    </section>
+    <ul className="board-list">
+      {boards.map(board => (
+        <li key={board._id}>
+          <BoardPreview
+            board={board}
+          />
+        </li>
+      ))}
+    </ul>
   )
+}
+
+BoardList.propTypes = {
+  boards: PropTypes.arrayOf(PropTypes.object).isRequired,
 }

@@ -10,6 +10,8 @@ export function TaskEdit({ task, board, onSave, onClose }) {
     const [isLabelsOpen, setIsLabelsOpen] = useState(false)
     const [isMembersOpen, setIsMembersOpen] = useState(false)
     const [isDatesOpen, setIsDatesOpen] = useState(false)
+    const [isChecklistOpen, setIsChecklistOpen] = useState(false)
+    const [newTodoTitles, setNewTodoTitles] = useState({})
 
     function handleChange({ target }) {
         const { name, value } = target
@@ -22,6 +24,7 @@ export function TaskEdit({ task, board, onSave, onClose }) {
     function toggleMember(memberId) {
         setEditedTask(prev => {
             const memberIds = prev.memberIds || []
+
             return {
                 ...prev,
                 memberIds: memberIds.includes(memberId)
@@ -34,6 +37,7 @@ export function TaskEdit({ task, board, onSave, onClose }) {
     function toggleLabel(labelId) {
         setEditedTask(prev => {
             const labelIds = prev.labelIds || []
+
             return {
                 ...prev,
                 labelIds: labelIds.includes(labelId)
@@ -43,16 +47,77 @@ export function TaskEdit({ task, board, onSave, onClose }) {
         })
     }
 
-    function handleSubmit(ev) {
-        ev.preventDefault()
-        onSave(editedTask)
-    }
-
     function removeDueDate() {
         setEditedTask(prev => ({
             ...prev,
             dueDate: ''
         }))
+    }
+
+    function addChecklist() {
+        const checklist = {
+            id: 'cl' + Date.now(),
+            title: 'Checklist',
+            todos: []
+        }
+
+        setEditedTask(prev => ({
+            ...prev,
+            checklists: [...(prev.checklists || []), checklist]
+        }))
+
+        setIsChecklistOpen(false)
+    }
+
+    function addTodo(checklistId) {
+        const title = (newTodoTitles[checklistId] || '').trim()
+        if (!title) return
+
+        const todo = {
+            id: 'todo' + Date.now(),
+            title,
+            isDone: false
+        }
+
+        setEditedTask(prev => ({
+            ...prev,
+            checklists: (prev.checklists || []).map(checklist =>
+                checklist.id === checklistId
+                    ? {
+                        ...checklist,
+                        todos: [...(checklist.todos || []), todo]
+                    }
+                    : checklist
+            )
+        }))
+
+        setNewTodoTitles(prev => ({
+            ...prev,
+            [checklistId]: ''
+        }))
+    }
+
+    function toggleTodo(checklistId, todoId) {
+        setEditedTask(prev => ({
+            ...prev,
+            checklists: (prev.checklists || []).map(checklist =>
+                checklist.id === checklistId
+                    ? {
+                        ...checklist,
+                        todos: (checklist.todos || []).map(todo =>
+                            todo.id === todoId
+                                ? { ...todo, isDone: !todo.isDone }
+                                : todo
+                        )
+                    }
+                    : checklist
+            )
+        }))
+    }
+
+    function handleSubmit(ev) {
+        ev.preventDefault()
+        onSave(editedTask)
     }
 
     return (
@@ -94,7 +159,7 @@ export function TaskEdit({ task, board, onSave, onClose }) {
                                     <h4>Members</h4>
 
                                     <div className="task-label-list">
-                                        {(board.members || [])
+                                        {(board?.members || [])
                                             .filter(member =>
                                                 editedTask.memberIds.includes(member._id)
                                             )
@@ -106,6 +171,7 @@ export function TaskEdit({ task, board, onSave, onClose }) {
                                                 >
                                                     {member.fullname
                                                         ?.split(' ')
+                                                        .filter(Boolean)
                                                         .map(word => word[0])
                                                         .join('')
                                                         .toUpperCase()}
@@ -120,7 +186,7 @@ export function TaskEdit({ task, board, onSave, onClose }) {
                                     <h4>Labels</h4>
 
                                     <div className="task-label-list">
-                                        {(board.labels || [])
+                                        {(board?.labels || [])
                                             .filter(label =>
                                                 editedTask.labelIds.includes(label.id)
                                             )
@@ -169,6 +235,76 @@ export function TaskEdit({ task, board, onSave, onClose }) {
                                 </button>
                             </div>
 
+                            {(editedTask.checklists || []).map(checklist => {
+                                const todos = checklist.todos || []
+                                const doneCount = todos.filter(todo => todo.isDone).length
+                                const progress = todos.length
+                                    ? Math.round(doneCount / todos.length * 100)
+                                    : 0
+
+                                return (
+                                    <div
+                                        key={checklist.id}
+                                        className="task-checklist"
+                                    >
+                                        <h3>
+                                            <CheckSquare size={20} />
+                                            {checklist.title}
+                                        </h3>
+
+                                        <p>{progress}% completed</p>
+
+                                        <progress value={progress} max="100" />
+
+                                        {todos.map(todo => (
+                                            <label
+                                                key={todo.id}
+                                                className="task-checklist-todo"
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    checked={todo.isDone}
+                                                    onChange={() =>
+                                                        toggleTodo(checklist.id, todo.id)
+                                                    }
+                                                />
+
+                                                <span
+                                                    style={{
+                                                        textDecoration: todo.isDone
+                                                            ? 'line-through'
+                                                            : 'none'
+                                                    }}
+                                                >
+                                                    {todo.title}
+                                                </span>
+                                            </label>
+                                        ))}
+
+                                        <div className="task-checklist-add">
+                                            <input
+                                                type="text"
+                                                placeholder="Add an item..."
+                                                value={newTodoTitles[checklist.id] || ''}
+                                                onChange={ev =>
+                                                    setNewTodoTitles(prev => ({
+                                                        ...prev,
+                                                        [checklist.id]: ev.target.value
+                                                    }))
+                                                }
+                                            />
+
+                                            <button
+                                                type="button"
+                                                onClick={() => addTodo(checklist.id)}
+                                            >
+                                                Add item
+                                            </button>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+
                             <h3>
                                 <Activity size={20} />
                                 Activity
@@ -196,7 +332,7 @@ export function TaskEdit({ task, board, onSave, onClose }) {
                                 <div className="task-label-picker">
                                     <h4>Members</h4>
 
-                                    {(board.members || []).map(member => (
+                                    {(board?.members || []).map(member => (
                                         <label
                                             key={member._id}
                                             className="task-label-option"
@@ -232,7 +368,7 @@ export function TaskEdit({ task, board, onSave, onClose }) {
                                 <div className="task-label-picker">
                                     <h4>Labels</h4>
 
-                                    {(board.labels || []).map(label => (
+                                    {(board?.labels || []).map(label => (
                                         <label
                                             key={label.id}
                                             className="task-label-option"
@@ -289,10 +425,28 @@ export function TaskEdit({ task, board, onSave, onClose }) {
                                 </div>
                             )}
 
-                            <button type="button" disabled>
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    setIsChecklistOpen(prev => !prev)
+                                }
+                            >
                                 <CheckSquare size={16} />
                                 Checklist
                             </button>
+
+                            {isChecklistOpen && (
+                                <div className="task-label-picker">
+                                    <h4>Add checklist</h4>
+
+                                    <button
+                                        type="button"
+                                        onClick={addChecklist}
+                                    >
+                                        Add
+                                    </button>
+                                </div>
+                            )}
 
                             <button type="button" disabled>
                                 <Paperclip size={16} />
@@ -305,4 +459,5 @@ export function TaskEdit({ task, board, onSave, onClose }) {
         </div>
     )
 }
+
 

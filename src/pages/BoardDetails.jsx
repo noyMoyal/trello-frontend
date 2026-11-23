@@ -24,7 +24,12 @@ export function BoardDetails() {
           <h3>{board.title}</h3>
           <section className="group-container">
             {board.groups.map((group) => (
-              <BoardGroup key={group.id} group={group} />
+              <BoardGroup
+                key={group.id}
+                group={group}
+                labels={board.labels}
+                members={board.members}
+              />
             ))}
           </section>
         </div>

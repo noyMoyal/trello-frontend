@@ -21,6 +21,21 @@
     background-color: var(--card-bg);
     border-radius: var(--radius-card);
     box-shadow: var(--card-shadow);
+    & .task-labels {
+      display: grid;
+      grid-auto-flow: column;
+      justify-content: start;
+      gap: 4px;
+      margin: 0 0 4px;
+      padding: 0;
+      list-style: none;
+    }
+
+    & .task-labels li {
+      width: 40px;
+      height: 8px;
+      border-radius: 4px;
+    }
   }
 
   & h4,

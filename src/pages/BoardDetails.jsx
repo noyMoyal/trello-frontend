@@ -1,29 +1,77 @@
-import { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
 
-import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service'
-import { loadBoard } from '../store/actions/board.actions'
+import { useEffect, useState } from 'react'
+import { useParams, Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+
+import { loadBoard, updateBoard } from '../store/actions/board.actions'
+import { TaskEdit } from '../cmps/task/TaskEdit'
 
 export function BoardDetails() {
   const { boardId } = useParams()
-  const board = useSelector((storeState) => storeState.boardModule.board)
+  const board = useSelector(state => state.boardModule.board)
+  const [selectedTask, setSelectedTask] = useState(null)
 
   useEffect(() => {
     loadBoard(boardId)
   }, [boardId])
 
+  async function onSaveTask(updatedTask) {
+    const updatedBoard = {
+      ...board,
+      groups: board.groups.map(group => ({
+        ...group,
+        tasks: group.tasks.map(task =>
+          task.id === updatedTask.id ? updatedTask : task
+        )
+      }))
+    }
+
+    try {
+      await updateBoard(updatedBoard)
+      setSelectedTask(null)
+    } catch (err) {
+      console.error('Cannot save task', err)
+      alert('Cannot save task')
+    }
+  }
+
   return (
     <section className="board-details">
       <Link to="/board">Back to list</Link>
       <h1>Board Details</h1>
+
       {board && (
         <div>
           <h3>{board.title}</h3>
-          <pre> {JSON.stringify(board, null, 2)} </pre>
+
+          {board.groups.map(group => (
+            <div key={group.id}>
+              <h3>{group.title}</h3>
+
+              {group.tasks.map(task => (
+                <button
+                  key={task.id}
+                  onClick={() => setSelectedTask(task)}
+                >
+                  {task.title}
+                </button>
+              ))}
+            </div>
+          ))}
+
+          <pre>{JSON.stringify(board, null, 2)}</pre>
         </div>
+      )}
+
+      {selectedTask && (
+        <TaskEdit
+          task={selectedTask}
+          board={board}
+          onSave={onSaveTask}
+          onClose={() => setSelectedTask(null)}
+        />
       )}
     </section>
   )
 }
+

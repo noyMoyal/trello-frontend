@@ -21,3 +21,5 @@
 @import "cmps/board/BoardList";
 @import "cmps/board/BoardPreview";
 @import "cmps/board/BoardFilter";
+
+@import './cmps/task/TaskEdit.css';

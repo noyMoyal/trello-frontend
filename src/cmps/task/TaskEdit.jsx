@@ -2,7 +2,8 @@
 import { useState } from 'react'
 import {
     Users, Tag, CalendarDays, CheckSquare,
-    Paperclip, AlignLeft, Activity, X, CreditCard
+    Paperclip, AlignLeft, Activity, X, CreditCard,
+    Trash2
 } from 'lucide-react'
 
 export function TaskEdit({ task, board, onSave, onClose }) {
@@ -15,16 +16,12 @@ export function TaskEdit({ task, board, onSave, onClose }) {
 
     function handleChange({ target }) {
         const { name, value } = target
-        setEditedTask(prev => ({
-            ...prev,
-            [name]: value
-        }))
+        setEditedTask(prev => ({ ...prev, [name]: value }))
     }
 
     function toggleMember(memberId) {
         setEditedTask(prev => {
             const memberIds = prev.memberIds || []
-
             return {
                 ...prev,
                 memberIds: memberIds.includes(memberId)
@@ -37,7 +34,6 @@ export function TaskEdit({ task, board, onSave, onClose }) {
     function toggleLabel(labelId) {
         setEditedTask(prev => {
             const labelIds = prev.labelIds || []
-
             return {
                 ...prev,
                 labelIds: labelIds.includes(labelId)
@@ -48,10 +44,7 @@ export function TaskEdit({ task, board, onSave, onClose }) {
     }
 
     function removeDueDate() {
-        setEditedTask(prev => ({
-            ...prev,
-            dueDate: ''
-        }))
+        setEditedTask(prev => ({ ...prev, dueDate: '' }))
     }
 
     function addChecklist() {
@@ -65,8 +58,29 @@ export function TaskEdit({ task, board, onSave, onClose }) {
             ...prev,
             checklists: [...(prev.checklists || []), checklist]
         }))
-
         setIsChecklistOpen(false)
+    }
+
+    function updateChecklistTitle(checklistId, title) {
+        setEditedTask(prev => ({
+            ...prev,
+            checklists: (prev.checklists || []).map(checklist =>
+                checklist.id === checklistId
+                    ? { ...checklist, title }
+                    : checklist
+            )
+        }))
+    }
+
+    function removeChecklist(checklistId) {
+        if (!window.confirm('Delete this checklist?')) return
+
+        setEditedTask(prev => ({
+            ...prev,
+            checklists: (prev.checklists || []).filter(
+                checklist => checklist.id !== checklistId
+            )
+        }))
     }
 
     function addTodo(checklistId) {
@@ -115,6 +129,22 @@ export function TaskEdit({ task, board, onSave, onClose }) {
         }))
     }
 
+    function removeTodo(checklistId, todoId) {
+        setEditedTask(prev => ({
+            ...prev,
+            checklists: (prev.checklists || []).map(checklist =>
+                checklist.id === checklistId
+                    ? {
+                        ...checklist,
+                        todos: (checklist.todos || []).filter(
+                            todo => todo.id !== todoId
+                        )
+                    }
+                    : checklist
+            )
+        }))
+    }
+
     function handleSubmit(ev) {
         ev.preventDefault()
         onSave(editedTask)
@@ -141,7 +171,6 @@ export function TaskEdit({ task, board, onSave, onClose }) {
                 <form onSubmit={handleSubmit}>
                     <header className="task-edit-header">
                         <CreditCard size={24} />
-
                         <input
                             name="title"
                             value={editedTask.title || ''}
@@ -157,7 +186,6 @@ export function TaskEdit({ task, board, onSave, onClose }) {
                             {editedTask.memberIds?.length > 0 && (
                                 <div className="task-edit-labels">
                                     <h4>Members</h4>
-
                                     <div className="task-label-list">
                                         {(board?.members || [])
                                             .filter(member =>
@@ -184,7 +212,6 @@ export function TaskEdit({ task, board, onSave, onClose }) {
                             {editedTask.labelIds?.length > 0 && (
                                 <div className="task-edit-labels">
                                     <h4>Labels</h4>
-
                                     <div className="task-label-list">
                                         {(board?.labels || [])
                                             .filter(label =>
@@ -208,7 +235,6 @@ export function TaskEdit({ task, board, onSave, onClose }) {
                             {editedTask.dueDate && (
                                 <div className="task-edit-labels">
                                     <h4>Due date</h4>
-
                                     <span className="task-due-date">
                                         <CalendarDays size={16} />
                                         {editedTask.dueDate}
@@ -247,17 +273,38 @@ export function TaskEdit({ task, board, onSave, onClose }) {
                                         key={checklist.id}
                                         className="task-checklist"
                                     >
-                                        <h3>
+                                        <div className="task-checklist-header">
                                             <CheckSquare size={20} />
-                                            {checklist.title}
-                                        </h3>
+
+                                            <input
+                                                type="text"
+                                                value={checklist.title}
+                                                onChange={ev =>
+                                                    updateChecklistTitle(
+                                                        checklist.id,
+                                                        ev.target.value
+                                                    )
+                                                }
+                                                aria-label="Checklist title"
+                                            />
+
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    removeChecklist(checklist.id)
+                                                }
+                                                title="Delete checklist"
+                                                aria-label="Delete checklist"
+                                            >
+                                                <Trash2 size={17} />
+                                            </button>
+                                        </div>
 
                                         <p>{progress}% completed</p>
-
                                         <progress value={progress} max="100" />
 
                                         {todos.map(todo => (
-                                            <label
+                                            <div
                                                 key={todo.id}
                                                 className="task-checklist-todo"
                                             >
@@ -278,7 +325,18 @@ export function TaskEdit({ task, board, onSave, onClose }) {
                                                 >
                                                     {todo.title}
                                                 </span>
-                                            </label>
+
+                                                <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                        removeTodo(checklist.id, todo.id)
+                                                    }
+                                                    title="Delete item"
+                                                    aria-label="Delete item"
+                                                >
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            </div>
                                         ))}
 
                                         <div className="task-checklist-add">
@@ -320,9 +378,7 @@ export function TaskEdit({ task, board, onSave, onClose }) {
 
                             <button
                                 type="button"
-                                onClick={() =>
-                                    setIsMembersOpen(prev => !prev)
-                                }
+                                onClick={() => setIsMembersOpen(prev => !prev)}
                             >
                                 <Users size={16} />
                                 Members
@@ -331,7 +387,6 @@ export function TaskEdit({ task, board, onSave, onClose }) {
                             {isMembersOpen && (
                                 <div className="task-label-picker">
                                     <h4>Members</h4>
-
                                     {(board?.members || []).map(member => (
                                         <label
                                             key={member._id}
@@ -345,7 +400,6 @@ export function TaskEdit({ task, board, onSave, onClose }) {
                                                     toggleMember(member._id)
                                                 }
                                             />
-
                                             <span className="task-member-name">
                                                 {member.fullname}
                                             </span>
@@ -356,9 +410,7 @@ export function TaskEdit({ task, board, onSave, onClose }) {
 
                             <button
                                 type="button"
-                                onClick={() =>
-                                    setIsLabelsOpen(prev => !prev)
-                                }
+                                onClick={() => setIsLabelsOpen(prev => !prev)}
                             >
                                 <Tag size={16} />
                                 Labels
@@ -367,7 +419,6 @@ export function TaskEdit({ task, board, onSave, onClose }) {
                             {isLabelsOpen && (
                                 <div className="task-label-picker">
                                     <h4>Labels</h4>
-
                                     {(board?.labels || []).map(label => (
                                         <label
                                             key={label.id}
@@ -381,7 +432,6 @@ export function TaskEdit({ task, board, onSave, onClose }) {
                                                     toggleLabel(label.id)
                                                 }
                                             />
-
                                             <span
                                                 style={{
                                                     backgroundColor: label.color
@@ -396,9 +446,7 @@ export function TaskEdit({ task, board, onSave, onClose }) {
 
                             <button
                                 type="button"
-                                onClick={() =>
-                                    setIsDatesOpen(prev => !prev)
-                                }
+                                onClick={() => setIsDatesOpen(prev => !prev)}
                             >
                                 <CalendarDays size={16} />
                                 Dates
@@ -407,7 +455,6 @@ export function TaskEdit({ task, board, onSave, onClose }) {
                             {isDatesOpen && (
                                 <div className="task-label-picker">
                                     <h4>Due date</h4>
-
                                     <input
                                         type="date"
                                         name="dueDate"
@@ -415,7 +462,6 @@ export function TaskEdit({ task, board, onSave, onClose }) {
                                         onChange={handleChange}
                                         className="task-date-input"
                                     />
-
                                     <button
                                         type="button"
                                         onClick={removeDueDate}
@@ -427,9 +473,7 @@ export function TaskEdit({ task, board, onSave, onClose }) {
 
                             <button
                                 type="button"
-                                onClick={() =>
-                                    setIsChecklistOpen(prev => !prev)
-                                }
+                                onClick={() => setIsChecklistOpen(prev => !prev)}
                             >
                                 <CheckSquare size={16} />
                                 Checklist
@@ -438,7 +482,6 @@ export function TaskEdit({ task, board, onSave, onClose }) {
                             {isChecklistOpen && (
                                 <div className="task-label-picker">
                                     <h4>Add checklist</h4>
-
                                     <button
                                         type="button"
                                         onClick={addChecklist}
@@ -459,5 +502,6 @@ export function TaskEdit({ task, board, onSave, onClose }) {
         </div>
     )
 }
+
 
 

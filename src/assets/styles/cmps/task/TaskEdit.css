@@ -336,4 +336,52 @@
 }
 
 
+.task-checklist-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.task-checklist-header input {
+    flex: 1;
+    min-width: 0;
+    padding: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    background: transparent;
+    border-radius: 4px;
+}
+
+.task-checklist-header input:focus {
+    background: white;
+    border-color: #0c66e4;
+    outline: none;
+}
+
+.task-checklist-header button,
+.task-checklist-todo button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border: none;
+    background: transparent;
+    color: #626f86;
+    cursor: pointer;
+}
+
+.task-checklist-header button:hover,
+.task-checklist-todo button:hover {
+    color: #ae2e24;
+    background: #f4d8d5;
+}
+
+.task-checklist-todo span {
+    flex: 1;
+    min-width: 0;
+}
+
+
 

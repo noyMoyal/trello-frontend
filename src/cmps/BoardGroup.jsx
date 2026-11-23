@@ -1,6 +1,6 @@
 import { TaskPreview } from './TaskPreview'
 
-export function BoardGroup({ group, labels, members }) {
+export function BoardGroup({ group, labels, members, onAddTask }) {
   return (
     <section className="group">
       <h4>{group.title}</h4>
@@ -12,6 +12,7 @@ export function BoardGroup({ group, labels, members }) {
           members={members}
         />
       ))}
+      <button onClick={() => onAddTask(group.id)}>+ Add a card</button>
     </section>
   )
 }

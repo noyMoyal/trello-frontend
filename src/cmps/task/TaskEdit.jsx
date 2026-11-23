@@ -3,7 +3,7 @@ import { useState } from 'react'
 import {
     Users, Tag, CalendarDays, CheckSquare,
     Paperclip, AlignLeft, Activity, X, CreditCard,
-    Trash2
+    Trash2, ExternalLink
 } from 'lucide-react'
 
 export function TaskEdit({ task, board, onSave, onClose }) {
@@ -12,7 +12,13 @@ export function TaskEdit({ task, board, onSave, onClose }) {
     const [isMembersOpen, setIsMembersOpen] = useState(false)
     const [isDatesOpen, setIsDatesOpen] = useState(false)
     const [isChecklistOpen, setIsChecklistOpen] = useState(false)
+    const [isAttachmentsOpen, setIsAttachmentsOpen] = useState(false)
     const [newTodoTitles, setNewTodoTitles] = useState({})
+    const [newAttachment, setNewAttachment] = useState({
+        title: '',
+        url: ''
+    })
+    const [attachmentError, setAttachmentError] = useState('')
 
     function handleChange({ target }) {
         const { name, value } = target
@@ -49,7 +55,7 @@ export function TaskEdit({ task, board, onSave, onClose }) {
 
     function addChecklist() {
         const checklist = {
-            id: 'cl' + Date.now(),
+            id: crypto.randomUUID(),
             title: 'Checklist',
             todos: []
         }
@@ -88,7 +94,7 @@ export function TaskEdit({ task, board, onSave, onClose }) {
         if (!title) return
 
         const todo = {
-            id: 'todo' + Date.now(),
+            id: crypto.randomUUID(),
             title,
             isDone: false
         }
@@ -141,6 +147,48 @@ export function TaskEdit({ task, board, onSave, onClose }) {
                         )
                     }
                     : checklist
+            )
+        }))
+    }
+
+    function addAttachment() {
+        const url = newAttachment.url.trim()
+        const title = newAttachment.title.trim()
+
+        let parsedUrl
+
+        try {
+            parsedUrl = new URL(url)
+            if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
+                throw new Error('Invalid protocol')
+            }
+        } catch {
+            setAttachmentError('Please enter a valid http or https URL')
+            return
+        }
+
+        const attachment = {
+            id: crypto.randomUUID(),
+            title: title || parsedUrl.hostname,
+            url: parsedUrl.href,
+            createdAt: Date.now()
+        }
+
+        setEditedTask(prev => ({
+            ...prev,
+            attachments: [...(prev.attachments || []), attachment]
+        }))
+
+        setNewAttachment({ title: '', url: '' })
+        setAttachmentError('')
+        setIsAttachmentsOpen(false)
+    }
+
+    function removeAttachment(attachmentId) {
+        setEditedTask(prev => ({
+            ...prev,
+            attachments: (prev.attachments || []).filter(
+                attachment => attachment.id !== attachmentId
             )
         }))
     }
@@ -363,6 +411,42 @@ export function TaskEdit({ task, board, onSave, onClose }) {
                                 )
                             })}
 
+                            {(editedTask.attachments || []).length > 0 && (
+                                <div className="task-attachments">
+                                    <h3>
+                                        <Paperclip size={20} />
+                                        Attachments
+                                    </h3>
+
+                                    {(editedTask.attachments || []).map(attachment => (
+                                        <div
+                                            key={attachment.id}
+                                            className="task-attachment-item"
+                                        >
+                                            <a
+                                                href={attachment.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <ExternalLink size={16} />
+                                                {attachment.title || attachment.url}
+                                            </a>
+
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    removeAttachment(attachment.id)
+                                                }
+                                                aria-label="Delete attachment"
+                                                title="Delete attachment"
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
                             <h3>
                                 <Activity size={20} />
                                 Activity
@@ -491,10 +575,54 @@ export function TaskEdit({ task, board, onSave, onClose }) {
                                 </div>
                             )}
 
-                            <button type="button" disabled>
+                            <button
+                                type="button"
+                                onClick={() => setIsAttachmentsOpen(prev => !prev)}
+                            >
                                 <Paperclip size={16} />
                                 Attachment
                             </button>
+
+                            {isAttachmentsOpen && (
+                                <div className="task-label-picker task-attachment-picker">
+                                    <h4>Add attachment</h4>
+
+                                    <input
+                                        type="text"
+                                        placeholder="Link title (optional)"
+                                        value={newAttachment.title}
+                                        onChange={ev => {
+                                            setNewAttachment(prev => ({
+                                                ...prev,
+                                                title: ev.target.value
+                                            }))
+                                        }}
+                                    />
+
+                                    <input
+                                        type="url"
+                                        placeholder="https://example.com"
+                                        value={newAttachment.url}
+                                        onChange={ev => {
+                                            setNewAttachment(prev => ({
+                                                ...prev,
+                                                url: ev.target.value
+                                            }))
+                                            setAttachmentError('')
+                                        }}
+                                    />
+
+                                    {attachmentError && (
+                                        <p className="task-attachment-error">
+                                            {attachmentError}
+                                        </p>
+                                    )}
+
+                                    <button type="button" onClick={addAttachment}>
+                                        Add link
+                                    </button>
+                                </div>
+                            )}
                         </aside>
                     </div>
                 </form>
@@ -502,6 +630,7 @@ export function TaskEdit({ task, board, onSave, onClose }) {
         </div>
     )
 }
+
 
 
 

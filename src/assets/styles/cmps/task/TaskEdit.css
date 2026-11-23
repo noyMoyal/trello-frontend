@@ -384,4 +384,65 @@
 }
 
 
+.task-attachments {
+    margin: 24px 0;
+}
+
+.task-attachments h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.task-attachment-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px;
+    margin-bottom: 8px;
+    background: white;
+    border-radius: 5px;
+}
+
+.task-attachment-item a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    color: #0c66e4;
+    text-decoration: none;
+}
+
+.task-attachment-item a:hover {
+    text-decoration: underline;
+}
+
+.task-attachment-item button {
+    border: none;
+    background: transparent;
+    color: #626f86;
+    cursor: pointer;
+}
+
+.task-attachment-item button:hover {
+    color: #ae2e24;
+}
+
+.task-attachment-picker input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px;
+    margin-bottom: 8px;
+    border: 1px solid #dfe1e6;
+    border-radius: 4px;
+}
+
+.task-attachment-error {
+    color: #ae2e24;
+    font-size: 12px;
+}
+
+
 

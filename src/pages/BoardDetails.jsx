@@ -35,6 +35,19 @@ export function BoardDetails() {
     }
   }
 
+  async function onRemoveTask(taskId) {
+    const groups = board.groups.map((group) => ({
+      ...group,
+      tasks: group.tasks.filter((task) => task.id !== taskId),
+    }))
+
+    try {
+      await updateBoard({ ...board, groups })
+    } catch (err) {
+      showErrorMsg('Cannot remove card')
+    }
+  }
+
   async function onSaveTask(updatedTask) {
     const updatedBoard = {
       ...board,
@@ -70,6 +83,7 @@ export function BoardDetails() {
                 members={board.members}
                 onAddTask={onAddTask}
                 onSelectTask={setSelectedTask}
+                onRemoveTask={onRemoveTask}
               />
             ))}
           </section>

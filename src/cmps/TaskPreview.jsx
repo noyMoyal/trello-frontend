@@ -1,4 +1,10 @@
-export function TaskPreview({ task, labels, members, onSelectTask }) {
+export function TaskPreview({
+  task,
+  labels,
+  members,
+  onSelectTask,
+  onRemoveTask,
+}) {
   const taskLabels = labels.filter((label) => task.labelIds?.includes(label.id))
 
   return (
@@ -15,6 +21,15 @@ export function TaskPreview({ task, labels, members, onSelectTask }) {
         </ul>
       )}
       <p>{task.title}</p>
+      <button
+        className="btn-remove-task"
+        onClick={(ev) => {
+          ev.stopPropagation()
+          onRemoveTask(task.id)
+        }}
+      >
+        x
+      </button>
     </article>
   )
 }

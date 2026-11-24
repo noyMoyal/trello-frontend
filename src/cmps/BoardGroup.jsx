@@ -6,6 +6,7 @@ export function BoardGroup({
   members,
   onAddTask,
   onSelectTask,
+  onRemoveTask,
 }) {
   return (
     <section className="group">
@@ -17,6 +18,7 @@ export function BoardGroup({
           labels={labels}
           members={members}
           onSelectTask={onSelectTask}
+          onRemoveTask={onRemoveTask}
         />
       ))}
       <button onClick={() => onAddTask(group.id)}>+ Add a card</button>

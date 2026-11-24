@@ -1,6 +1,12 @@
 import { TaskPreview } from './TaskPreview'
 
-export function BoardGroup({ group, labels, members, onAddTask }) {
+export function BoardGroup({
+  group,
+  labels,
+  members,
+  onAddTask,
+  onSelectTask,
+}) {
   return (
     <section className="group">
       <h4>{group.title}</h4>
@@ -10,6 +16,7 @@ export function BoardGroup({ group, labels, members, onAddTask }) {
           task={task}
           labels={labels}
           members={members}
+          onSelectTask={onSelectTask}
         />
       ))}
       <button onClick={() => onAddTask(group.id)}>+ Add a card</button>

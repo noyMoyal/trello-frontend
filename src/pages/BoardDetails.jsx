@@ -1,16 +1,17 @@
-import { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useParams, Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
 
-import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service'
+import { showErrorMsg } from '../services/event-bus.service'
 import { loadBoard, updateBoard } from '../store/actions/board.actions'
 import { makeId } from '../services/util.service'
 import { BoardGroup } from '../cmps/BoardGroup'
+import { TaskEdit } from '../cmps/task/TaskEdit'
 
 export function BoardDetails() {
   const { boardId } = useParams()
   const board = useSelector((storeState) => storeState.boardModule.board)
+  const [selectedTask, setSelectedTask] = useState(null)
 
   useEffect(() => {
     loadBoard(boardId)
@@ -34,6 +35,25 @@ export function BoardDetails() {
     }
   }
 
+  async function onSaveTask(updatedTask) {
+    const updatedBoard = {
+      ...board,
+      groups: board.groups.map((group) => ({
+        ...group,
+        tasks: group.tasks.map((task) =>
+          task.id === updatedTask.id ? updatedTask : task,
+        ),
+      })),
+    }
+
+    try {
+      await updateBoard(updatedBoard)
+      setSelectedTask(null)
+    } catch (err) {
+      showErrorMsg('Cannot save card')
+    }
+  }
+
   return (
     <section className="board-details">
       <Link to="/board">Back to list</Link>
@@ -49,10 +69,20 @@ export function BoardDetails() {
                 labels={board.labels}
                 members={board.members}
                 onAddTask={onAddTask}
+                onSelectTask={setSelectedTask}
               />
             ))}
           </section>
         </div>
+      )}
+
+      {selectedTask && board && (
+        <TaskEdit
+          task={selectedTask}
+          board={board}
+          onSave={onSaveTask}
+          onClose={() => setSelectedTask(null)}
+        />
       )}
     </section>
   )

@@ -44,26 +44,36 @@ export function BoardDetails() {
         <div>
           <h3>{board.title}</h3>
 
-          {board.groups.map(group => (
-            <div key={group.id}>
-              <h3>{group.title}</h3>
+          <section className="group-container">
+            {board.groups.map(group => (
+              <section key={group.id} className="group">
+                <h4>{group.title}</h4>
 
-              {group.tasks.map(task => (
-                <button
-                  key={task.id}
-                  onClick={() => setSelectedTask(task)}
-                >
-                  {task.title}
-                </button>
-              ))}
-            </div>
-          ))}
-
-          <pre>{JSON.stringify(board, null, 2)}</pre>
+                {group.tasks.map(task => (
+                  <article
+                    key={task.id}
+                    className="task"
+                    onClick={() => setSelectedTask(task)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={ev => {
+                      if (ev.key === 'Enter' || ev.key === ' ') {
+                        ev.preventDefault()
+                        setSelectedTask(task)
+                      }
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <p>{task.title}</p>
+                  </article>
+                ))}
+              </section>
+            ))}
+          </section>
         </div>
       )}
 
-      {selectedTask && (
+      {selectedTask && board && (
         <TaskEdit
           task={selectedTask}
           board={board}
@@ -74,4 +84,5 @@ export function BoardDetails() {
     </section>
   )
 }
+
 

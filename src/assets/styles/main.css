@@ -1,3 +1,4 @@
+
 @import 'setup/var';
 @import 'setup/typography';
 
@@ -21,3 +22,5 @@
 @import 'cmps/board/BoardPreview';
 @import 'cmps/board/BoardFilter';
 @import 'cmps/board/BoardDetails';
+
+@import './cmps/task/TaskEdit.css';

@@ -121,12 +121,7 @@ export function BoardIndex() {
       <WorkspaceSidebar view={view} onSetView={setView} onCreateBoard={onCreateBoard} />
       <div className="workspace-content">
         <header className="workspace-heading">
-          <div className="workspace-avatar" aria-hidden="true">W</div>
-          <div>
-            <p className="workspace-eyebrow">YOUR WORKSPACE</p>
-            <h1>Workspace</h1>
-            <p>A little space for your next big idea.</p>
-          </div>
+          <h1>Workspace</h1>
           <button className="workspace-primary" onClick={onCreateBoard}>
             <span aria-hidden="true">＋</span> Create board
           </button>
@@ -150,7 +145,7 @@ export function BoardIndex() {
                 </div>
                 {starredBoards.length ? <BoardList boards={starredBoards} {...listProps} /> : (
                   <div className="workspace-empty">
-                    <h3>{filterBy.txt.trim() ? 'No matching favorites' : 'Keep your favorites close'}</h3>
+                    <h3>{filterBy.txt.trim() ? 'No matching favorites' : 'No starred boards'}</h3>
                     <p>{filterBy.txt.trim() ? 'Try a different board name.' : 'Star a board and it will show up here.'}</p>
                   </div>
                 )}
@@ -164,8 +159,8 @@ export function BoardIndex() {
                 </div>
                 {!boards.length ? (
                   <div className="workspace-empty">
-                    <h3>Good things start with a board</h3>
-                    <p>Create your first board to start organizing your ideas.</p>
+                    <h3>No boards yet</h3>
+                    <p>Create a board to get started.</p>
                     <button className="workspace-primary" onClick={onCreateBoard}>Create board</button>
                   </div>
                 ) : !filteredBoards.length ? (

@@ -2,7 +2,7 @@
     .board-list {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 22px;
+        gap: 16px;
         margin: 0;
         padding: 0;
         list-style: none;
@@ -14,24 +14,22 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 9px;
+        gap: 8px;
         width: 100%;
-        height: 192px;
+        height: 136px;
         padding: 20px;
-        border: 1px dashed #c1c9d5;
-        border-radius: 9px;
+        border: 1px solid #dfe3e9;
+        border-radius: 4px;
         background: #fafbfc;
         color: #44546f;
         font-size: 14px;
-        font-weight: 600;
+        font-weight: 500;
 
-        & small { color: #626f86; font-size: 12px; font-weight: 400; }
         &:hover { background: #f1f5fa; border-color: #8590a2; }
     }
     .board-create-icon { font-size: 23px; font-weight: 400; line-height: 1; margin-bottom: 3px; }
 
     @media (max-width: 480px) {
         .board-list { grid-template-columns: 1fr; gap: 16px; }
-        .board-create-tile { height: 140px; }
     }
 }

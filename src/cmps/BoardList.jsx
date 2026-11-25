@@ -20,7 +20,6 @@ export function BoardList({ boards, onToggleStar, onUpdateBoard, onRemoveBoard, 
           <button className="board-create-tile" onClick={onCreateBoard}>
             <span className="board-create-icon" aria-hidden="true">＋</span>
             <span>Create a new board</span>
-            <small>Make room for what’s next</small>
           </button>
         </li>
       )}

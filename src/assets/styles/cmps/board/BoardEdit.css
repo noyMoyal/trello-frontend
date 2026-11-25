@@ -4,9 +4,9 @@
         max-height: calc(100dvh - 48px);
         padding: 26px;
         border: 1px solid #dfe3e9;
-        border-radius: 12px;
+        border-radius: 4px;
         color: #172b4d;
-        box-shadow: 0 20px 60px #091e4240;
+        box-shadow: 0 4px 16px #091e4226;
 
         &::backdrop { background: #091e4266; }
         & form { display: block; }
@@ -26,6 +26,7 @@
         .dialog-close { background: transparent; color: #626f86; font-size: 24px; border-radius: 5px; padding: 0; width: 32px; height: 32px; }
         .dialog-close:hover { background: #f1f2f4; }
     }
+    .board-title-label { display: block; margin-top: 24px; }
     .board-title-label, .board-color-picker legend { font-size: 13px; font-weight: 600; }
     .board-title-label > span { color: #ae2e24; }
     .board-color-picker {

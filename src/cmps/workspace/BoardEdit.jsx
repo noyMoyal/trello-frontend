@@ -54,7 +54,6 @@ export function BoardEdit({ board, onSaveBoard, onClose }) {
           <h2 id="board-edit-heading">{isEdit ? 'Edit board' : 'Create board'}</h2>
           <button type="button" className="dialog-close" aria-label="Close" disabled={isSaving} onClick={onClose}>×</button>
         </header>
-        <p>{isEdit ? 'A fresh name. A different look. Make it yours.' : 'Bring your tasks, ideas, and people together.'}</p>
         <label className="board-title-label" htmlFor="board-title">Board title <span aria-hidden="true">*</span></label>
         <input id="board-title" value={title} onChange={ev => setTitle(ev.target.value)} placeholder="e.g. Team projects" autoFocus required disabled={isSaving} />
         <fieldset disabled={isSaving} className="board-color-picker">

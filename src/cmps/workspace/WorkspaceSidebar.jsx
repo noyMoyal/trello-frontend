@@ -4,7 +4,7 @@ export function WorkspaceSidebar({ view, onSetView, onCreateBoard }) {
     <aside className="workspace-sidebar" aria-label="Workspace navigation">
       <div className="sidebar-workspace">
         <span className="workspace-avatar" aria-hidden="true">W</span>
-        <div><strong>Workspace</strong><span>Free plan</span></div>
+        <strong>Workspace</strong>
       </div>
       <nav className="workspace-nav" aria-label="Board views">
         <button className={view === 'all' ? 'is-active' : ''} aria-pressed={view === 'all'} onClick={() => onSetView('all')}>
@@ -15,10 +15,8 @@ export function WorkspaceSidebar({ view, onSetView, onCreateBoard }) {
         </button>
       </nav>
       <div className="sidebar-boards">
-        <span>YOUR WORKSPACE</span>
         <button onClick={onCreateBoard}><span aria-hidden="true">＋</span> Create a board</button>
       </div>
-      <p className="sidebar-note">Ideas, plans, and everything<br />in between. All in one place.</p>
     </aside>
   )
 }

@@ -2,39 +2,22 @@
     .board-preview {
         position: relative;
         border: 1px solid #dfe3e9;
-        border-radius: 9px;
+        border-radius: 4px;
         background: #fff;
-        transition: box-shadow .15s, border-color .15s;
 
-        &:hover { box-shadow: 0 4px 12px #172b4d12; border-color: #b3bfd1; }
+        &:hover { border-color: #8590a2; }
         &:has(.board-menu[open]) { z-index: 2; }
     }
     .board-cover {
         display: flex;
         position: relative;
         overflow: hidden;
-        align-items: flex-end;
-        height: 122px;
-        padding: 17px;
-        border-radius: 8px 8px 0 0;
+        height: 88px;
+        border-radius: 3px 3px 0 0;
         color: white;
         background-size: cover;
         background-position: center;
-        isolation: isolate;
-
-        &::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent, #0003); z-index: -1; }
     }
-    .board-cover-shape {
-        position: absolute;
-        width: 190px;
-        height: 190px;
-        right: -42px;
-        top: -92px;
-        border: 35px solid #ffffff0d;
-        border-radius: 50%;
-        pointer-events: none;
-    }
-    .board-cover-title { font-size: 17px; font-weight: 650; line-height: 1.4; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow-wrap: anywhere; padding-right: 14px; }
     .board-star {
         position: absolute;
         top: 9px;
@@ -53,7 +36,7 @@
         &:hover { background: #172b4d80; }
         &.is-starred { color: #f5cd47; }
     }
-    .board-card-footer { display: flex; align-items: center; gap: 8px; min-height: 68px; padding: 12px 13px 12px 16px; }
+    .board-card-footer { display: flex; align-items: center; gap: 8px; min-height: 46px; padding: 8px 10px 8px 12px; }
     .board-card-info {
         display: grid;
         gap: 4px;
@@ -61,7 +44,6 @@
         flex: 1;
 
         & a { color: #172b4d; font-size: 13px; font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        > span { color: #626f86; font-size: 11px; }
     }
     .board-menu {
         position: relative;
@@ -78,8 +60,8 @@
         width: 166px;
         padding: 5px;
         border: 1px solid #dfe3e9;
-        border-radius: 7px;
-        box-shadow: 0 6px 18px #091e4226;
+        border-radius: 4px;
+        box-shadow: 0 2px 6px #091e4226;
         background: #fff;
 
         & button { display: block; width: 100%; text-align: left; background: transparent; color: #172b4d; padding: 10px; border-radius: 4px; font-size: 13px; }

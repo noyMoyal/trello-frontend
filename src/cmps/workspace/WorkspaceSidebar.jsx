@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
-import { Folder, LayoutGrid, Plus, Star } from 'lucide-react'
+import { Folder, LayoutGrid, Moon, Plus, Star, Sun } from 'lucide-react'
 
-export function WorkspaceSidebar({ view, onSetView, onCreateBoard, boardCount, starredCount }) {
+export function WorkspaceSidebar({ view, onSetView, onCreateBoard, boardCount, starredCount, theme, onToggleTheme }) {
   return (
     <aside className="workspace-sidebar" aria-label="Workspace navigation">
       <div className="sidebar-workspace">
@@ -20,6 +20,18 @@ export function WorkspaceSidebar({ view, onSetView, onCreateBoard, boardCount, s
         <span>WORKSPACE</span>
         <button onClick={onCreateBoard}><Plus size={18} aria-hidden="true" /> Create a board</button>
       </div>
+      <div className="sidebar-appearance">
+        <button
+          type="button"
+          className="workspace-theme-toggle"
+          aria-label="Dark mode"
+          aria-pressed={theme === 'dark'}
+          title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          onClick={onToggleTheme}
+        >
+          {theme === 'dark' ? <Moon size={19} aria-hidden="true" /> : <Sun size={19} aria-hidden="true" />}
+        </button>
+      </div>
     </aside>
   )
 }
@@ -30,4 +42,6 @@ WorkspaceSidebar.propTypes = {
   onCreateBoard: PropTypes.func.isRequired,
   boardCount: PropTypes.number.isRequired,
   starredCount: PropTypes.number.isRequired,
+  theme: PropTypes.oneOf(['light', 'dark']).isRequired,
+  onToggleTheme: PropTypes.func.isRequired,
 }

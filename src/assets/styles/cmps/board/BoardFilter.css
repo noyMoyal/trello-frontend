@@ -32,7 +32,7 @@
         color: var(--workspace-muted);
         white-space: nowrap;
 
-        & select { min-width: 0; max-width: calc(100% - 5em); min-height: 44px; padding: 9px 26px 9px 12px; color: var(--workspace-text); background: var(--workspace-paper); border: 1px solid var(--workspace-border); border-radius: 7px; cursor: pointer; font-size: .875rem; }
+        & select { width: 168px; min-width: 0; max-width: 100%; min-height: 44px; padding: 9px 26px 9px 12px; color: var(--workspace-text); background: var(--workspace-paper); border: 1px solid var(--workspace-border); border-radius: 7px; cursor: pointer; font-size: .875rem; }
     }
     @media (max-width: 640px) {
         .board-filter { flex-wrap: wrap; gap: 14px; }

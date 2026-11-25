@@ -3,7 +3,7 @@
         display: flex;
         flex-direction: column;
         padding: 32px 16px;
-        background: #eaece3;
+        background: var(--workspace-sidebar);
         border-right: 1px solid var(--workspace-border);
     }
     .sidebar-workspace {
@@ -21,19 +21,37 @@
 
         & button { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid transparent; border-radius: 7px; text-align: left; background: transparent; color: var(--workspace-muted); font-size: .875rem; }
         & button > svg { flex-shrink: 0; }
-        & button:hover { background: #e0e5d9; color: var(--workspace-text); }
-        & button.is-active { background: var(--workspace-paper); border-color: #d0d7c9; color: var(--workspace-accent); font-weight: 600; }
+        & button:hover { background: var(--workspace-hover); color: var(--workspace-text); }
+        & button.is-active { background: var(--workspace-paper); border-color: var(--workspace-border); color: var(--workspace-accent); font-weight: 600; }
         .sidebar-count { margin-inline-start: auto; font-size: .75rem; font-weight: 500; }
     }
     .sidebar-boards {
         margin-top: 32px;
-        border-top: 1px solid #d0d6c9;
+        border-top: 1px solid var(--workspace-border);
         padding-top: 24px;
 
         > span { display: block; padding-inline: 12px; font-size: .6875rem; font-weight: 600; letter-spacing: 1.5px; color: var(--workspace-muted); }
         & button { display: flex; align-items: center; gap: 10px; padding: 12px; background: transparent; color: var(--workspace-text); width: 100%; min-height: 44px; text-align: left; font-size: .875rem; border-radius: 6px; margin-top: 8px; }
-        & button:hover { background: #e0e5d9; }
+        & button:hover { background: var(--workspace-hover); }
         & button > svg { flex-shrink: 0; color: var(--workspace-accent); }
+    }
+    .sidebar-appearance {
+        position: fixed;
+        inset-inline-start: 20px;
+        bottom: max(16px, env(safe-area-inset-bottom));
+        z-index: 5;
+    }
+    .workspace-theme-toggle {
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        border: 0;
+        color: var(--workspace-text);
+        background: transparent;
+
+        &:hover, &[aria-pressed="true"] { color: var(--workspace-accent); }
     }
     @media (max-width: 760px) {
         .workspace-sidebar { padding: 12px 20px; border-right: 0; border-bottom: 1px solid var(--workspace-border); }
@@ -41,5 +59,6 @@
         .workspace-nav { display: flex; gap: 8px; flex-wrap: wrap; }
         .workspace-nav button { width: auto; padding: 10px 14px; font-size: .8125rem; }
         .sidebar-count { display: none; }
+        .workspace-content { padding-bottom: 96px; }
     }
 }

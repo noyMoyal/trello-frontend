@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { Folder, Plus, Star } from 'lucide-react'
@@ -13,7 +14,7 @@ import { BoardEdit } from '../cmps/workspace/BoardEdit'
 import { BoardRemove } from '../cmps/workspace/BoardRemove'
 import { WorkspaceSidebar } from '../cmps/workspace/WorkspaceSidebar'
 
-export function BoardIndex() {
+export function BoardIndex({ theme, onToggleTheme }) {
   const boards = useSelector(storeState => storeState.boardModule.boards)
   const [filterBy, setFilterBy] = useState(boardService.getDefaultFilter())
   const [view, setView] = useState('all')
@@ -120,7 +121,8 @@ export function BoardIndex() {
   return (
     <section className="board-index" ref={workspaceRef}>
       <WorkspaceSidebar view={view} onSetView={setView} onCreateBoard={onCreateBoard}
-        boardCount={boards.length} starredCount={boards.filter(board => board.isStarred).length} />
+        boardCount={boards.length} starredCount={boards.filter(board => board.isStarred).length}
+        theme={theme} onToggleTheme={onToggleTheme} />
       <div className="workspace-content">
         <header className="workspace-heading">
           <div>
@@ -185,4 +187,9 @@ export function BoardIndex() {
       {boardToRemove && <BoardRemove board={boardToRemove} onRemoveBoard={onRemoveBoard} onClose={onCloseDialog} />}
     </section>
   )
+}
+
+BoardIndex.propTypes = {
+  theme: PropTypes.oneOf(['light', 'dark']).isRequired,
+  onToggleTheme: PropTypes.func.isRequired,
 }

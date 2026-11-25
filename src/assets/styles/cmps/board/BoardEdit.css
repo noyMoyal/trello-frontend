@@ -12,10 +12,11 @@
         &::backdrop { background: #26352f66; }
         & form { display: block; }
         & form > p { color: var(--workspace-muted); font-size: .875rem; line-height: 1.6; margin: 16px 0 24px; overflow-wrap: anywhere; }
-        & input { display: block; width: 100%; border: 1px solid #9ca999; border-radius: 6px; padding: 11px 12px; color: var(--workspace-text); background: #fff; margin: 8px 0 24px; box-sizing: border-box; }
+        & input { display: block; width: 100%; border: 1px solid var(--workspace-control-border); border-radius: 6px; padding: 11px 12px; color: var(--workspace-text); background: var(--workspace-input); margin: 8px 0 24px; box-sizing: border-box; }
+        & input::placeholder { color: var(--workspace-muted); opacity: 1; }
         & button:disabled { cursor: wait; opacity: .55; }
         :is(button, input):focus-visible { outline: 3px solid var(--workspace-accent); outline-offset: 3px; }
-        & form > .board-dialog-error { margin: 18px 0 0; color: #a5322d; }
+        & form > .board-dialog-error { margin: 18px 0 0; color: var(--workspace-danger-text); }
     }
     .board-dialog-heading {
         display: flex;
@@ -25,11 +26,11 @@
 
         & h2 { margin: 0; font-size: 1.25rem; font-weight: 600; letter-spacing: -.5px; }
         .dialog-close { display: grid; place-items: center; background: transparent; color: var(--workspace-muted); font-size: 24px; border-radius: 6px; padding: 0; width: 44px; height: 44px; }
-        .dialog-close:hover { background: #eceee5; }
+        .dialog-close:hover { background: var(--workspace-hover); }
     }
     .board-title-label { display: block; margin-top: 22px; }
     .board-title-label, .board-color-picker legend { font-size: .875rem; font-weight: 600; }
-    .board-title-label > span { color: #a5322d; }
+    .board-title-label > span { color: var(--workspace-danger-text); }
     .board-color-picker {
         padding: 0;
         border: none;

@@ -1,11 +1,12 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import PropTypes from 'prop-types'
 import { AppLogo } from '../AppLogo'
 
 import { logout } from '../../store/actions/user.actions'
 import { showErrorMsg, showSuccessMsg } from '../../services/event-bus.service'
 
-export function WorkspaceHeader() {
+export function WorkspaceHeader({ theme }) {
     const user = useSelector(storeState => storeState.userModule.user)
     const navigate = useNavigate()
 
@@ -23,7 +24,7 @@ export function WorkspaceHeader() {
         <header className="app-header full workspace-app-header">
             <nav aria-label="Main navigation">
                 <Link to="/" className="logo">
-                    <AppLogo />
+                    <AppLogo isDark={theme === 'dark'} />
                 </Link>
                 <NavLink to="/board">Workspace</NavLink>
                 {!user && <>
@@ -42,4 +43,8 @@ export function WorkspaceHeader() {
             </nav>
         </header>
     )
+}
+
+WorkspaceHeader.propTypes = {
+    theme: PropTypes.oneOf(['light', 'dark']).isRequired,
 }

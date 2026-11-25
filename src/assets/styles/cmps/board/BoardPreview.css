@@ -12,7 +12,7 @@
             left: 0;
             width: 40%;
             height: 30px;
-            border: 1px solid #afc1b5;
+            border: 1px solid var(--workspace-folder-border);
             border-radius: 9px 12px 0 0;
             background: var(--board-color);
             z-index: -1;
@@ -27,7 +27,7 @@
         position: relative;
         height: 100px;
         padding: 22px;
-        border: 1px solid #c9d1c4;
+        border: 1px solid var(--workspace-folder-border);
         border-bottom: 0;
         border-radius: 0 9px 0 0;
         background-size: cover;
@@ -52,7 +52,7 @@
         background: var(--workspace-paper);
         color: var(--workspace-muted);
 
-        &:hover { background: #e5eee2; color: var(--workspace-accent); }
+        &:hover { background: var(--workspace-hover); color: var(--workspace-accent); }
         &.is-starred { color: var(--workspace-accent); }
     }
     .board-card-footer {
@@ -62,8 +62,8 @@
         min-height: 90px;
         padding: 16px 12px 16px 20px;
         background: var(--workspace-paper);
-        border: 1px solid #c9d1c4;
-        border-top-color: #e0e4d9;
+        border: 1px solid var(--workspace-folder-border);
+        border-top-color: var(--workspace-border);
         border-radius: 0 0 9px 9px;
     }
     .board-card-info {
@@ -81,7 +81,7 @@
 
         & summary { display: grid; place-items: center; list-style: none; cursor: pointer; width: 38px; height: 38px; border-radius: 6px; color: var(--workspace-muted); }
         & summary::-webkit-details-marker { display: none; }
-        & summary:hover, &[open] summary { background: #eceee5; }
+        & summary:hover, &[open] summary { background: var(--workspace-hover); }
     }
     .board-menu-content {
         position: absolute;
@@ -95,8 +95,8 @@
         background: var(--workspace-paper);
 
         & button { display: block; width: 100%; min-height: 42px; text-align: left; background: transparent; color: var(--workspace-text); padding: 10px; border-radius: 4px; font-size: .875rem; }
-        & button:hover { background: #eceee5; }
-        .board-delete-action { color: #a5322d; }
+        & button:hover { background: var(--workspace-hover); }
+        .board-delete-action { color: var(--workspace-danger-text); }
     }
     @media (max-width: 760px) {
         .board-star, .board-menu summary { width: 44px; height: 44px; }

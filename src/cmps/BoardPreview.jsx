@@ -7,7 +7,7 @@ export function BoardPreview({ board, onToggleStar, onUpdateBoard, onRemoveBoard
   const menuRef = useRef(null)
   const { backgroundColor, backgroundImage } = board.style || {}
   const coverStyle = {
-    backgroundColor: backgroundColor || '#edf0e7',
+    backgroundColor: backgroundColor || 'var(--workspace-cover)',
     backgroundImage: backgroundImage
       ? (backgroundImage.startsWith('url(') ? backgroundImage : `url("${backgroundImage}")`)
       : undefined,
@@ -28,7 +28,7 @@ export function BoardPreview({ board, onToggleStar, onUpdateBoard, onRemoveBoard
   }
 
   return (
-    <article className="board-preview" style={{ '--board-color': backgroundColor || '#b5cdbf' }}>
+    <article className="board-preview" style={{ '--board-color': backgroundColor || 'var(--workspace-tab)' }}>
       <Link className={`board-cover ${backgroundColor || backgroundImage ? 'has-background' : ''}`} to={`/board/${board._id}`} style={coverStyle} aria-label={`Open ${board.title}`}>
         <span className="board-cover-label"><Folder size={20} aria-hidden="true" /> Board</span>
         <ArrowUpRight size={20} className="board-open-icon" aria-hidden="true" />

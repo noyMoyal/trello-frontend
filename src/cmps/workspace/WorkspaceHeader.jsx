@@ -1,5 +1,6 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { AppLogo } from '../AppLogo'
 
 import { logout } from '../../store/actions/user.actions'
 import { showErrorMsg, showSuccessMsg } from '../../services/event-bus.service'
@@ -22,8 +23,7 @@ export function WorkspaceHeader() {
         <header className="app-header full workspace-app-header">
             <nav aria-label="Main navigation">
                 <Link to="/" className="logo">
-                    <span className="workspace-logo-icon" aria-hidden="true"><i /><i /></span>
-                    Trello
+                    <AppLogo />
                 </Link>
                 <NavLink to="/board">Workspace</NavLink>
                 {!user && <>

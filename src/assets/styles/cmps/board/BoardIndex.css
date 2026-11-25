@@ -139,19 +139,6 @@
         .user-info .score { display: none; }
         .user-info button { color: #44546f; background: #f1f2f4; border-radius: 5px; margin-inline-start: 12px; }
     }
-    .workspace-logo-icon {
-        display: inline-flex;
-        gap: 4px;
-        width: 25px;
-        height: 25px;
-        border-radius: 5px;
-        background: #0c66e4;
-        padding: 5px;
-
-        & i { background: #fff; border-radius: 1px; width: 6px; height: 15px; }
-        & i:last-child { height: 10px; }
-    }
-
     @media (min-width: 1600px) {
         .workspace-content { padding-top: 60px; }
     }

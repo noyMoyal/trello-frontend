@@ -1,0 +1,42 @@
+.workspace-layout {
+    .board-dialog {
+        width: min(440px, calc(100vw - 32px));
+        max-height: calc(100dvh - 48px);
+        padding: 26px;
+        border: 1px solid #dfe3e9;
+        border-radius: 4px;
+        color: #172b4d;
+        box-shadow: 0 4px 16px #091e4226;
+
+        &::backdrop { background: #091e4266; }
+        & form { display: block; }
+        & form > p { color: #626f86; font-size: 14px; line-height: 1.6; margin: 16px 0 24px; overflow-wrap: anywhere; }
+        & input { display: block; width: 100%; border: 1px solid #8590a2; border-radius: 5px; padding: 10px 12px; color: #172b4d; background: white; margin: 8px 0 24px; box-sizing: border-box; }
+        & button:disabled { cursor: wait; opacity: .55; }
+        :is(button, input):focus-visible { outline: 3px solid #579dff; outline-offset: 3px; }
+        & form > .board-dialog-error { margin: 18px 0 0; color: #ae2e24; }
+    }
+    .board-dialog-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+
+        & h2 { margin: 0; font-size: 20px; }
+        .dialog-close { background: transparent; color: #626f86; font-size: 24px; border-radius: 5px; padding: 0; width: 32px; height: 32px; }
+        .dialog-close:hover { background: #f1f2f4; }
+    }
+    .board-title-label { display: block; margin-top: 24px; }
+    .board-title-label, .board-color-picker legend { font-size: 13px; font-weight: 600; }
+    .board-title-label > span { color: #ae2e24; }
+    .board-color-picker {
+        padding: 0;
+        border: none;
+        margin: 0;
+
+        > div { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 10px; }
+        & button { height: 40px; padding: 0; border-radius: 5px; color: #fff; font-size: 19px; }
+        & button[aria-pressed="true"] { outline: 2px solid #172b4d; outline-offset: 3px; }
+    }
+    .board-dialog-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+}

@@ -1,13 +1,71 @@
-.board-preview {
-    color: var(--gray2);
+.workspace-layout {
+    .board-preview {
+        position: relative;
+        border: 1px solid #dfe3e9;
+        border-radius: 4px;
+        background: #fff;
 
-    > header {
-        font-size: 1.2em;
-        color: var(--gray1);
+        &:hover { border-color: #8590a2; }
+        &:has(.board-menu[open]) { z-index: 2; }
     }
+    .board-cover {
+        display: flex;
+        position: relative;
+        overflow: hidden;
+        height: 88px;
+        border-radius: 3px 3px 0 0;
+        color: white;
+        background-size: cover;
+        background-position: center;
+    }
+    .board-star {
+        position: absolute;
+        top: 9px;
+        right: 9px;
+        display: grid;
+        place-items: center;
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        border-radius: 5px;
+        background: #172b4d40;
+        color: #fff;
+        font-size: 22px;
+        line-height: 1;
 
-    & p {
-        margin-block: 0 0.2rem;
-        font-size: .9em;
+        &:hover { background: #172b4d80; }
+        &.is-starred { color: #f5cd47; }
+    }
+    .board-card-footer { display: flex; align-items: center; gap: 8px; min-height: 46px; padding: 8px 10px 8px 12px; }
+    .board-card-info {
+        display: grid;
+        gap: 4px;
+        min-width: 0;
+        flex: 1;
+
+        & a { color: #172b4d; font-size: 13px; font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    }
+    .board-menu {
+        position: relative;
+        flex-shrink: 0;
+
+        & summary { display: grid; place-items: center; list-style: none; cursor: pointer; width: 30px; height: 30px; border-radius: 5px; color: #626f86; font-size: 22px; font-weight: 700; line-height: 1; }
+        & summary::-webkit-details-marker { display: none; }
+        & summary:hover, &[open] summary { background: #f1f2f4; }
+    }
+    .board-menu-content {
+        position: absolute;
+        top: 35px;
+        right: 0;
+        width: 166px;
+        padding: 5px;
+        border: 1px solid #dfe3e9;
+        border-radius: 4px;
+        box-shadow: 0 2px 6px #091e4226;
+        background: #fff;
+
+        & button { display: block; width: 100%; text-align: left; background: transparent; color: #172b4d; padding: 10px; border-radius: 4px; font-size: 13px; }
+        & button:hover { background: #f1f2f4; }
+        .board-delete-action { color: #ae2e24; }
     }
 }

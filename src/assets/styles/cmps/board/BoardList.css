@@ -1,8 +1,8 @@
 .workspace-layout {
     .board-list {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 16px;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 24px;
         margin: 0;
         padding: 0;
         list-style: none;
@@ -14,22 +14,26 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 10px;
         width: 100%;
-        height: 136px;
-        padding: 20px;
-        border: 1px solid #dfe3e9;
-        border-radius: 4px;
-        background: #fafbfc;
-        color: #44546f;
-        font-size: 14px;
+        min-height: 192px;
+        height: calc(100% - 15px);
+        margin-top: 15px;
+        padding: 24px;
+        border: 1px dashed #aeb9ac;
+        border-radius: 9px;
+        background: #eeefe7;
+        color: var(--workspace-text);
+        font-size: 1rem;
         font-weight: 500;
 
-        &:hover { background: #f1f5fa; border-color: #8590a2; }
+        & small { color: var(--workspace-muted); font-size: .8125rem; font-weight: 400; }
+        &:hover { background: #e4e9dd; border-color: var(--workspace-accent); }
     }
-    .board-create-icon { font-size: 23px; font-weight: 400; line-height: 1; margin-bottom: 3px; }
+    .board-create-icon { display: grid; place-items: center; width: 38px; height: 38px; border: 1px solid #c5cfc0; border-radius: 50%; color: var(--workspace-accent); }
 
-    @media (max-width: 480px) {
-        .board-list { grid-template-columns: 1fr; gap: 16px; }
+    @media (max-width: 540px) {
+        .board-list { grid-template-columns: 1fr; gap: 20px; }
+        .board-create-tile { min-height: 150px; }
     }
 }

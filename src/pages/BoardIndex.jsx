@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { Folder, Plus, Star } from 'lucide-react'
 
 import { loadBoards, addBoard, updateBoard, removeBoard } from '../store/actions/board.actions'
 import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service'
@@ -118,12 +119,17 @@ export function BoardIndex() {
 
   return (
     <section className="board-index" ref={workspaceRef}>
-      <WorkspaceSidebar view={view} onSetView={setView} onCreateBoard={onCreateBoard} />
+      <WorkspaceSidebar view={view} onSetView={setView} onCreateBoard={onCreateBoard}
+        boardCount={boards.length} starredCount={boards.filter(board => board.isStarred).length} />
       <div className="workspace-content">
         <header className="workspace-heading">
-          <h1>Workspace</h1>
+          <div>
+            <p className="workspace-eyebrow">YOUR PROJECTS</p>
+            <h1>Workspace</h1>
+            <p className="workspace-summary">{boards.length} {boards.length === 1 ? 'board' : 'boards'}<span aria-hidden="true"> · </span>{boards.filter(board => board.isStarred).length} starred</p>
+          </div>
           <button className="workspace-primary" onClick={onCreateBoard}>
-            <span aria-hidden="true">＋</span> Create board
+            <Plus size={17} aria-hidden="true" /> Create board
           </button>
         </header>
         <BoardFilter filterBy={filterBy} setFilterBy={setFilterBy} />
@@ -140,7 +146,7 @@ export function BoardIndex() {
             {(view === 'starred' || starredBoards.length > 0) && (
               <section className="workspace-section" aria-labelledby="starred-heading">
                 <div className="workspace-section-heading">
-                  <h2 id="starred-heading"><span className="heading-star" aria-hidden="true">☆</span> Starred boards</h2>
+                  <h2 id="starred-heading"><Star size={19} className="heading-star" aria-hidden="true" /> Starred boards</h2>
                   <span className="board-count">{starredBoards.length}</span>
                 </div>
                 {starredBoards.length ? <BoardList boards={starredBoards} {...listProps} /> : (
@@ -154,7 +160,7 @@ export function BoardIndex() {
             {view === 'all' && (
               <section className="workspace-section" aria-labelledby="boards-heading">
                 <div className="workspace-section-heading">
-                  <h2 id="boards-heading"><span aria-hidden="true">▦</span> Your boards</h2>
+                  <h2 id="boards-heading"><Folder size={19} aria-hidden="true" /> Your boards</h2>
                   <span className="board-count">{filteredBoards.length}</span>
                 </div>
                 {!boards.length ? (

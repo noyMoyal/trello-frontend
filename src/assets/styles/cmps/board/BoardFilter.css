@@ -5,36 +5,36 @@
         justify-content: space-between;
         gap: 20px;
         margin-top: 28px;
-        font-size: 13px;
+        font-size: .875rem;
     }
     .board-search {
         display: flex;
         align-items: center;
-        gap: 9px;
-        width: 300px;
+        gap: 10px;
+        width: 340px;
         max-width: 100%;
-        height: 40px;
-        padding-inline: 12px;
-        border: 1px solid #dfe3e9;
-        border-radius: 6px;
-        background: #fff;
+        height: 44px;
+        padding-inline: 14px;
+        border: 1px solid var(--workspace-border);
+        border-radius: 7px;
+        background: var(--workspace-paper);
 
-        & svg { width: 18px; height: 18px; flex-shrink: 0; color: #626f86; }
-        & input { min-width: 0; width: 100%; padding: 0; border: none; background: transparent; color: #172b4d; outline: none; font-size: 13px; }
-        & input::placeholder { color: #626f86; }
-        &:focus-within { outline: 2px solid #0c66e4; outline-offset: 1px; }
+        & svg { flex-shrink: 0; color: var(--workspace-muted); }
+        & input { min-width: 0; width: 100%; padding: 0; border: none; background: transparent; color: var(--workspace-text); outline: none; font-size: .875rem; }
+        & input::placeholder { color: var(--workspace-muted); }
+        &:focus-within { outline: 2px solid var(--workspace-accent); outline-offset: 2px; }
         & input:focus-visible { outline: none; }
     }
     .board-sort {
         display: flex;
         align-items: center;
         gap: 10px;
-        color: #626f86;
+        color: var(--workspace-muted);
         white-space: nowrap;
 
-        & select { min-height: 40px; padding: 8px 28px 8px 12px; color: #44546f; background: #fff; border: 1px solid #dfe3e9; border-radius: 6px; cursor: pointer; font-size: 13px; }
+        & select { min-width: 0; max-width: calc(100% - 5em); min-height: 44px; padding: 9px 26px 9px 12px; color: var(--workspace-text); background: var(--workspace-paper); border: 1px solid var(--workspace-border); border-radius: 7px; cursor: pointer; font-size: .875rem; }
     }
-    @media (max-width: 600px) {
+    @media (max-width: 640px) {
         .board-filter { flex-wrap: wrap; gap: 14px; }
         .board-search { width: 100%; }
         .board-sort { width: 100%; justify-content: space-between; }

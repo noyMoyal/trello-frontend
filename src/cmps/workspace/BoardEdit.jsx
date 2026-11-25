@@ -2,8 +2,8 @@ import PropTypes from 'prop-types'
 import { useState, useEffect, useRef } from 'react'
 
 const BOARD_COLORS = [
-  { name: 'Blue', color: '#0c66e4' },
-  { name: 'Teal', color: '#087e8b' },
+  { name: 'Teal', color: '#176b60' },
+  { name: 'Blue', color: '#356b8a' },
   { name: 'Purple', color: '#6e5dc6' },
   { name: 'Orange', color: '#ae582b' },
   { name: 'Green', color: '#397b54' },
@@ -22,6 +22,7 @@ export function BoardEdit({ board, onSaveBoard, onClose }) {
   useEffect(() => {
     const dialog = dialogRef.current
     dialog.showModal()
+    dialog.querySelector('#board-title').focus()
     return () => dialog.close()
   }, [])
 
@@ -36,7 +37,7 @@ export function BoardEdit({ board, onSaveBoard, onClose }) {
     setIsSaving(true)
     setError('')
     try {
-      await onSaveBoard({ title: title.trim(), style: { backgroundColor: '#0c66e4', ...style } })
+      await onSaveBoard({ title: title.trim(), style: { backgroundColor: '#176b60', ...style } })
     } catch (err) {
       setError('We couldn’t save your board. Please try again.')
       setIsSaving(false)
@@ -61,9 +62,9 @@ export function BoardEdit({ board, onSaveBoard, onClose }) {
           <div>
             {BOARD_COLORS.map(({ name, color }) => (
               <button key={color} type="button" style={{ backgroundColor: color }} aria-label={`${name} background`}
-                aria-pressed={style.backgroundColor === color || (!style.backgroundColor && !style.backgroundImage && color === '#0c66e4')}
+                aria-pressed={style.backgroundColor === color || (!style.backgroundColor && !style.backgroundImage && color === '#176b60')}
                 onClick={() => setStyle({ ...style, backgroundColor: color, backgroundImage: '' })}>
-                {style.backgroundColor === color || (!style.backgroundColor && !style.backgroundImage && color === '#0c66e4') ? '✓' : ''}
+                {style.backgroundColor === color || (!style.backgroundColor && !style.backgroundImage && color === '#176b60') ? '✓' : ''}
               </button>
             ))}
           </div>

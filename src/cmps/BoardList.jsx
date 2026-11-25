@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types'
+import { Plus } from 'lucide-react'
 import { BoardPreview } from './BoardPreview'
 
 export function BoardList({ boards, onToggleStar, onUpdateBoard, onRemoveBoard, onCreateBoard, pendingIds }) {
@@ -18,8 +19,9 @@ export function BoardList({ boards, onToggleStar, onUpdateBoard, onRemoveBoard, 
       {onCreateBoard && (
         <li>
           <button className="board-create-tile" onClick={onCreateBoard}>
-            <span className="board-create-icon" aria-hidden="true">＋</span>
-            <span>Create a new board</span>
+            <span className="board-create-icon" aria-hidden="true"><Plus size={24} /></span>
+            <span>Create a board</span>
+            <small>Start a new project</small>
           </button>
         </li>
       )}

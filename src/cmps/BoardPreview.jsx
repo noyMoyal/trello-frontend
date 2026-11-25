@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types'
 import { useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { ArrowUpRight, Folder, MoreHorizontal, Star } from 'lucide-react'
 
 export function BoardPreview({ board, onToggleStar, onUpdateBoard, onRemoveBoard, isPending }) {
   const menuRef = useRef(null)
   const { backgroundColor, backgroundImage } = board.style || {}
   const coverStyle = {
-    backgroundColor: backgroundColor || '#0c66e4',
+    backgroundColor: backgroundColor || '#edf0e7',
     backgroundImage: backgroundImage
       ? (backgroundImage.startsWith('url(') ? backgroundImage : `url("${backgroundImage}")`)
       : undefined,
@@ -27,8 +28,10 @@ export function BoardPreview({ board, onToggleStar, onUpdateBoard, onRemoveBoard
   }
 
   return (
-    <article className="board-preview">
-      <Link className="board-cover" to={`/board/${board._id}`} style={coverStyle} aria-label={`Open ${board.title}`}>
+    <article className="board-preview" style={{ '--board-color': backgroundColor || '#b5cdbf' }}>
+      <Link className={`board-cover ${backgroundColor || backgroundImage ? 'has-background' : ''}`} to={`/board/${board._id}`} style={coverStyle} aria-label={`Open ${board.title}`}>
+        <span className="board-cover-label"><Folder size={20} aria-hidden="true" /> Board</span>
+        <ArrowUpRight size={20} className="board-open-icon" aria-hidden="true" />
       </Link>
       <button
         className={`board-star ${board.isStarred ? 'is-starred' : ''}`}
@@ -36,10 +39,11 @@ export function BoardPreview({ board, onToggleStar, onUpdateBoard, onRemoveBoard
         aria-pressed={board.isStarred}
         disabled={isPending}
         onClick={() => onToggleStar(board)}
-      >{board.isStarred ? '★' : '☆'}</button>
+      ><Star size={18} fill={board.isStarred ? 'currentColor' : 'none'} aria-hidden="true" /></button>
       <div className="board-card-footer">
         <div className="board-card-info">
           <Link to={`/board/${board._id}`}>{board.title}</Link>
+          <span>{board.createdBy?.fullname ? `Created by ${board.createdBy.fullname}` : 'Workspace board'}</span>
         </div>
         <details className="board-menu" ref={menuRef} onKeyDown={ev => {
           if (ev.key === 'Escape') {
@@ -48,7 +52,7 @@ export function BoardPreview({ board, onToggleStar, onUpdateBoard, onRemoveBoard
             menuRef.current.querySelector('summary').focus()
           }
         }}>
-          <summary aria-label={`Actions for ${board.title}`}>···</summary>
+          <summary aria-label={`Actions for ${board.title}`}><MoreHorizontal size={20} aria-hidden="true" /></summary>
           <div className="board-menu-content">
             <button disabled={isPending} onClick={() => onAction(onUpdateBoard)}>Edit board</button>
             <button className="board-delete-action" disabled={isPending} onClick={() => onAction(onRemoveBoard)}>Delete board</button>
@@ -60,7 +64,7 @@ export function BoardPreview({ board, onToggleStar, onUpdateBoard, onRemoveBoard
 }
 
 BoardPreview.propTypes = {
-  board: PropTypes.shape({ _id: PropTypes.string.isRequired, title: PropTypes.string.isRequired, isStarred: PropTypes.bool, style: PropTypes.object }).isRequired,
+  board: PropTypes.shape({ _id: PropTypes.string.isRequired, title: PropTypes.string.isRequired, isStarred: PropTypes.bool, style: PropTypes.object, createdBy: PropTypes.shape({ fullname: PropTypes.string }) }).isRequired,
   onToggleStar: PropTypes.func.isRequired,
   onUpdateBoard: PropTypes.func.isRequired,
   onRemoveBoard: PropTypes.func.isRequired,

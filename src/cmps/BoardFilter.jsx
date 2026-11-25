@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types'
+import { Search } from 'lucide-react'
 export function BoardFilter({ filterBy, setFilterBy }) {
   function onSetSort(ev) {
     const sortDir = +ev.target.value
@@ -8,11 +9,9 @@ export function BoardFilter({ filterBy, setFilterBy }) {
   return (
     <div className="board-filter">
       <label className="board-search">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true">
-          <circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 4 4" />
-        </svg>
+        <Search size={18} aria-hidden="true" />
         <input type="search" name="txt" aria-label="Search boards" value={filterBy.txt}
-          placeholder="Search your boards" onChange={ev => setFilterBy({ ...filterBy, txt: ev.target.value })} />
+          placeholder="Find a board…" onChange={ev => setFilterBy({ ...filterBy, txt: ev.target.value })} />
       </label>
       <label className="board-sort">
         <span>Sort by</span>
